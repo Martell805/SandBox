@@ -1,16 +1,17 @@
 import pygame
 
 from field import Field
-from blocks.immovable_blocks import *
-from blocks.solid_blocks import *
-from blocks.fluid_blocks import *
+import blocks
+
+
+print(list(filter(lambda x: not x.endswith("__"), dir(eval("blocks")))))
 
 
 class SandBox:
     FPS = 60
     FIELD_SIZE = 50
     TILE_SIZE = 16
-    selected_block = Block
+    selected_block = blocks.immovable_blocks.Block
 
     def __init__(self):
         self.SCREEN_SIZE = self.FIELD_SIZE * self.TILE_SIZE
@@ -34,7 +35,7 @@ class SandBox:
         elif pygame.mouse.get_pressed(3)[2]:
             self.sb_field.set(pygame.mouse.get_pos()[0] // self.TILE_SIZE + 1,
                               pygame.mouse.get_pos()[1] // self.TILE_SIZE + 1,
-                              Void)
+                              blocks.solid_blocks.Void)
 
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -44,21 +45,21 @@ class SandBox:
             if event.key == pygame.K_SPACE:
                 self.pause = not self.pause
             elif event.key == pygame.K_0:
-                self.selected_block = Block
+                self.selected_block = blocks.immovable_blocks.Block
             elif event.key == pygame.K_1:
-                self.selected_block = Wall
+                self.selected_block = blocks.immovable_blocks.Wall
             elif event.key == pygame.K_2:
-                self.selected_block = SolidBlock
+                self.selected_block = blocks.solid_blocks.SolidBlock
             elif event.key == pygame.K_3:
-                self.selected_block = Sand
+                self.selected_block = blocks.solid_blocks.Sand
             elif event.key == pygame.K_4:
-                self.selected_block = Stone
+                self.selected_block = blocks.solid_blocks.Stone
             elif event.key == pygame.K_5:
-                self.selected_block = FluidBlock
+                self.selected_block = blocks.fluid_blocks.FluidBlock
             elif event.key == pygame.K_6:
-                self.selected_block = Water
+                self.selected_block = blocks.fluid_blocks.Water
             elif event.key == pygame.K_7:
-                self.selected_block = Oil
+                self.selected_block = blocks.fluid_blocks.Oil
 
     def run(self):
         print("Чтобы изменить блок на ЛКМ выберите его номер. На ПКМ всегда ставится Void")
