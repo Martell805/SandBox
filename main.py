@@ -1,7 +1,6 @@
 import pygame
 
 from field import Field
-# import blocks
 
 from blocks.immovable_blocks import Block, Wall
 from blocks.solid_blocks import SolidBlock, Void, Sand, Stone
@@ -43,24 +42,25 @@ class SandBox:
             exit()
 
         elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_SPACE:
-                self.pause = not self.pause
-            elif event.key == pygame.K_0:
-                self.selected_block = Block
-            elif event.key == pygame.K_1:
-                self.selected_block = Wall
-            elif event.key == pygame.K_2:
-                self.selected_block = SolidBlock
-            elif event.key == pygame.K_3:
-                self.selected_block = Sand
-            elif event.key == pygame.K_4:
-                self.selected_block = Stone
-            elif event.key == pygame.K_5:
-                self.selected_block = FluidBlock
-            elif event.key == pygame.K_6:
-                self.selected_block = Water
-            elif event.key == pygame.K_7:
-                self.selected_block = Oil
+            match event.key:
+                case pygame.K_SPACE:
+                    self.pause = not self.pause
+                case pygame.K_0:
+                    self.selected_block = Block
+                case pygame.K_1:
+                    self.selected_block = Wall
+                case pygame.K_2:
+                    self.selected_block = SolidBlock
+                case pygame.K_3:
+                    self.selected_block = Sand
+                case pygame.K_4:
+                    self.selected_block = Stone
+                case pygame.K_5:
+                    self.selected_block = FluidBlock
+                case pygame.K_6:
+                    self.selected_block = Water
+                case pygame.K_7:
+                    self.selected_block = Oil
 
     def run(self):
         print("Чтобы изменить блок на ЛКМ выберите его номер. На ПКМ всегда ставится Void")
