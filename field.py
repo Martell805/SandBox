@@ -1,3 +1,5 @@
+import pygame.surface
+
 from blocks.immovable_blocks import Wall
 from blocks.solid_blocks import Void
 
@@ -6,7 +8,7 @@ class Field:
     tick = 0
 
     def __init__(self, size):
-        self.size = size
+        self.size = size + 2
 
         self.field = [[Void(q, w, self.tick) for w in range(self.size)] for q in range(self.size)]
 
@@ -28,6 +30,10 @@ class Field:
         self.tick += 1
 
     def draw(self, screen, ts):
+        temp_screen = pygame.surface.Surface((self.size * ts, self.size * ts))
+
         for q in range(self.size):
             for w in range(self.size):
-                self.field[q][w].draw(screen, ts)
+                self.field[q][w].draw(temp_screen, ts)
+
+        screen.blit(temp_screen, (-ts, -ts))
