@@ -1,5 +1,4 @@
 from os import environ
-environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
 import pygame
 
@@ -8,6 +7,8 @@ from field import Field
 from blocks.immovable_blocks import Block, Wall
 from blocks.solid_blocks import SolidBlock, Void, Sand, Stone
 from blocks.fluid_blocks import FluidBlock, Water, Oil
+
+environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
 
 class SandBox:
