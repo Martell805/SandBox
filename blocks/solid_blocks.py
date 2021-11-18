@@ -3,12 +3,10 @@ from blocks.immovable_blocks import Block
 
 
 class SolidBlock(Block):
-    def __init__(self, x, y, tick):
-        super().__init__(x, y, tick)
-        self.color = (255, 255, 255)
-        self.density = 5000
-        self.movable = True
-        self.id = 'sb_solidBlock'
+    color = (255, 255, 255)
+    density = 5000
+    movable = True
+    id = 'sb_solidBlock'
 
     def chooseWayDown(self, field):
         neighbour = field.get(self.x, self.y + 1)
@@ -43,24 +41,18 @@ class SolidBlock(Block):
 
 
 class Void(SolidBlock):
-    def __init__(self, x, y, tick):
-        super().__init__(x, y, tick)
-        self.color = (55, 55, 55)
-        self.density = 0
-        self.id = 'sb_void'
+    color = (55, 55, 55)
+    density = 0
+    id = 'sb_void'
 
 
 class Sand(SolidBlock):
-    def __init__(self, x, y, tick):
-        super().__init__(x, y, tick)
-        self.color = (252, 221, 118)
-        self.density = 3000
-        self.id = 'sb_sand'
+    color = (252, 221, 118)
+    density = 3000
+    id = 'sb_sand'
 
 
 class Stone(SolidBlock):
-    def __init__(self, x, y, tick):
-        super().__init__(x, y, tick)
-        self.color = (200, 200, 200)
-        self.density = 5000
-        self.id = 'sb_stone'
+    color = (200, 200, 200)
+    density = 5000
+    id = 'sb_stone'

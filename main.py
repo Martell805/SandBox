@@ -5,11 +5,11 @@ from blocks.solid_blocks import Void, Sand, Stone
 
 
 class SandBox:
-    def __init__(self):
-        self.FPS = 60
-        self.FIELD_SIZE = 50
-        self.TILE_SIZE = 16
+    FPS = 60
+    FIELD_SIZE = 50
+    TILE_SIZE = 16
 
+    def __init__(self):
         self.SCREEN_SIZE = self.FIELD_SIZE * self.TILE_SIZE
 
         pygame.init()

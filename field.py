@@ -3,8 +3,9 @@ from blocks.solid_blocks import Void
 
 
 class Field:
+    tick = 0
+
     def __init__(self, size):
-        self.tick = 0
         self.size = size
 
         self.field = [[Void(q, w, self.tick) for w in range(self.size)] for q in range(self.size)]

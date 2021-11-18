@@ -2,14 +2,15 @@ import pygame
 
 
 class Block:
+    density = 0
+    movable = False
+    id = 'sb_block'
+    color = (0, 0, 0)
+
     def __init__(self, x, y, tick):
         self.x = x
         self.y = y
-        self.color = (0, 0, 0)
         self.tick = tick
-        self.density = 0
-        self.movable = False
-        self.id = 'sb_block'
 
     def __repr__(self):
         return f"{self.id}: {(self.x, self.y)}"
@@ -22,9 +23,6 @@ class Block:
 
 
 class Wall(Block):
-    def __init__(self, x, y, tick):
-        super().__init__(x, y, tick)
-        self.color = (136, 69, 53)
-        self.id = 'sb_wall'
-
+    color = (136, 69, 53)
+    id = 'sb_wall'
 
