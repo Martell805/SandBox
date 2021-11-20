@@ -1,7 +1,5 @@
 import pygame.surface
-
-from blocks.immovable_blocks import Wall
-from blocks.solid_blocks import Void
+from blocks.default_blocks import Wall, Void
 
 
 class Field:

@@ -1,5 +1,5 @@
 from random import shuffle
-from blocks.immovable_blocks import Block
+from blocks.default_blocks import Block
 
 
 class SolidBlock(Block):
@@ -38,12 +38,6 @@ class SolidBlock(Block):
         way = self.chooseWayDown(field)
 
         self.updateField(field, way)
-
-
-class Void(SolidBlock):
-    color = (55, 55, 55)
-    density = 0
-    id = 'sb_void'
 
 
 class Sand(SolidBlock):

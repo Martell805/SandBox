@@ -2,7 +2,7 @@ import pygame
 
 
 class Block:
-    density = 0
+    density = 1000000000000000
     movable = False
     id = 'sb_block'
     color = (0, 0, 0)
@@ -26,3 +26,9 @@ class Wall(Block):
     color = (136, 69, 53)
     id = 'sb_wall'
 
+
+class Void(Block):
+    color = (55, 55, 55)
+    density = 0
+    movable = True
+    id = 'sb_void'

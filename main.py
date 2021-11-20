@@ -4,11 +4,35 @@ import pygame
 
 from field import Field
 
-from blocks.immovable_blocks import Block, Wall
-from blocks.solid_blocks import SolidBlock, Void, Sand, Stone
+from blocks.default_blocks import Block, Wall, Void
+from blocks.solid_blocks import SolidBlock, Sand, Stone
 from blocks.fluid_blocks import FluidBlock, Water, Oil
+# from blocks.air_blocks import AirBlock
 
 environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
+
+
+def pickBlock(event, prev_block):
+    match event.key:
+        case pygame.K_0:
+            return Block
+        case pygame.K_1:
+            return Wall
+        case pygame.K_2:
+            return SolidBlock
+        case pygame.K_3:
+            return Sand
+        case pygame.K_4:
+            return Stone
+        case pygame.K_5:
+            return FluidBlock
+        case pygame.K_6:
+            return Water
+        case pygame.K_7:
+            return Oil
+        # case pygame.K_8:
+            # return AirBlock
+    return prev_block
 
 
 class SandBox:
@@ -46,25 +70,11 @@ class SandBox:
             exit()
 
         elif event.type == pygame.KEYUP:
-            match event.key:
-                case pygame.K_SPACE:
-                    self.pause = not self.pause
-                case pygame.K_0:
-                    self.selected_block = Block
-                case pygame.K_1:
-                    self.selected_block = Wall
-                case pygame.K_2:
-                    self.selected_block = SolidBlock
-                case pygame.K_3:
-                    self.selected_block = Sand
-                case pygame.K_4:
-                    self.selected_block = Stone
-                case pygame.K_5:
-                    self.selected_block = FluidBlock
-                case pygame.K_6:
-                    self.selected_block = Water
-                case pygame.K_7:
-                    self.selected_block = Oil
+            if event.key == pygame.K_SPACE:
+                print(1)
+                self.pause = not self.pause
+
+            self.selected_block = pickBlock(event, self.selected_block)
 
     def run(self):
         print("Чтобы изменить блок на ЛКМ выберите его номер. На ПКМ всегда ставится Void")
@@ -77,6 +87,7 @@ class SandBox:
         print("5. FluidBlock")
         print("6. Water")
         print("7. Oil")
+        # print("8. AirBlock")
 
         while True:
             for event in pygame.event.get():
