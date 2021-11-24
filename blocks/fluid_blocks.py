@@ -29,6 +29,13 @@ class FluidBlock(SolidBlock):
         self.updateField(field, way)
 
 
+class Void(FluidBlock):
+    color = (55, 55, 55)
+    density = 0
+    movable = True
+    id = 'sb_void'
+
+
 class Water(FluidBlock):
     color = (0, 149, 182)
     density = 1000

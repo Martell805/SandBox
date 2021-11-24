@@ -4,10 +4,10 @@ import pygame
 
 from field import Field
 
-from blocks.default_blocks import Block, Wall, Void
+from blocks.default_blocks import Block, Wall
 from blocks.solid_blocks import SolidBlock, Sand, Stone
-from blocks.fluid_blocks import FluidBlock, Water, Oil
-# from blocks.air_blocks import AirBlock
+from blocks.fluid_blocks import FluidBlock, Void, Water, Oil
+from blocks.air_blocks import AirBlock, Gas
 
 environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
@@ -30,8 +30,10 @@ def pickBlock(event, prev_block):
             return Water
         case pygame.K_7:
             return Oil
-        # case pygame.K_8:
-            # return AirBlock
+        case pygame.K_8:
+            return AirBlock
+        case pygame.K_9:
+            return Gas
     return prev_block
 
 
@@ -71,7 +73,6 @@ class SandBox:
 
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_SPACE:
-                print(1)
                 self.pause = not self.pause
 
             self.selected_block = pickBlock(event, self.selected_block)
@@ -87,7 +88,8 @@ class SandBox:
         print("5. FluidBlock")
         print("6. Water")
         print("7. Oil")
-        # print("8. AirBlock")
+        print("8. AirBlock")
+        print("9. Gas")
 
         while True:
             for event in pygame.event.get():

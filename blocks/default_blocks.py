@@ -26,9 +26,3 @@ class Wall(Block):
     color = (136, 69, 53)
     id = 'sb_wall'
 
-
-class Void(Block):
-    color = (55, 55, 55)
-    density = 0
-    movable = True
-    id = 'sb_void'

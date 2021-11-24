@@ -1,6 +1,8 @@
 import pygame.surface
-from blocks.default_blocks import Wall, Void
+from blocks.default_blocks import Wall
+from blocks.fluid_blocks import Void
 
+from random import shuffle
 
 class Field:
     tick = 0
@@ -22,8 +24,14 @@ class Field:
         return self.field[x][y]
 
     def update(self):
-        for q in range(self.size):
-            for w in range(self.size):
+
+        q_order = list(range(self.size))
+        shuffle(q_order)
+        w_order = list(range(self.size))
+        shuffle(w_order)
+
+        for q in q_order:
+            for w in w_order:
                 self.field[q][w].update(self)
         self.tick += 1
 
