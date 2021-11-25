@@ -5,9 +5,9 @@ class Block:
     density = 1000000000000000
     movable = False
     id = 'sb_block'
-    color = (0, 0, 0)
+    color = (127, 0, 127)
 
-    def __init__(self, x, y, tick):
+    def __init__(self, x: int, y: int, tick: int):
         self.x = x
         self.y = y
         self.tick = tick
@@ -18,8 +18,9 @@ class Block:
     def update(self, field):
         pass
 
-    def draw(self, surface, ts):
-        pygame.draw.rect(surface, self.color, (self.x * ts, self.y * ts, ts, ts))
+    def draw(self, surface: pygame.surface, tile_size: int):
+        pygame.draw.rect(surface, self.color,
+                         (self.x * tile_size, self.y * tile_size, tile_size, tile_size))
 
 
 class Wall(Block):

@@ -1,4 +1,3 @@
-from random import shuffle
 from blocks.fluid_blocks import FluidBlock
 
 

@@ -10,8 +10,8 @@ class FluidBlock(SolidBlock):
     def chooseWaySide(self, field):
         ways = [(1, 0), (-1, 0)]
         shuffle(ways)
-        neighbours = [field.get(self.x + ways[0][0], self.y + ways[0][1]),
-                      field.get(self.x + ways[1][0], self.y + ways[1][1])]
+        neighbours = [field[self.x + ways[0][0]][self.y + ways[0][1]],
+                      field[self.x + ways[1][0]][self.y + ways[1][1]]]
 
         if neighbours[0].density < self.density and neighbours[0].movable:
             return ways[0]

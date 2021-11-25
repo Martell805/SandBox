@@ -9,14 +9,14 @@ class SolidBlock(Block):
     id = 'sb_solidBlock'
 
     def chooseWayDown(self, field):
-        neighbour = field.get(self.x, self.y + 1)
+        neighbour = field[self.x][self.y + 1]
         if neighbour.density < self.density and neighbour.movable:
             return 0, 1
 
         ways = [(1, 1), (-1, 1)]
         shuffle(ways)
-        neighbours = [field.get(self.x + ways[0][0], self.y + ways[0][1]),
-                      field.get(self.x + ways[1][0], self.y + ways[1][1])]
+        neighbours = [field[self.x + ways[0][0]][self.y + ways[0][1]],
+                      field[self.x + ways[1][0]][self.y + ways[1][1]]]
 
         if neighbours[0].density < self.density and neighbours[0].movable:
             return ways[0]
@@ -29,7 +29,7 @@ class SolidBlock(Block):
         if way == (0, 0):
             return
 
-        neighbour = field.get(self.x + way[0], self.y + way[1])
+        neighbour = field[self.x + way[0]][self.y + way[1]]
         if self.tick != field.tick and neighbour.tick != field.tick:
             field.set(self.x, self.y, neighbour.__class__)
             field.set(self.x + way[0], self.y + way[1], self.__class__)
