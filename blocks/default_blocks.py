@@ -4,8 +4,9 @@ import pygame
 class Block:
     density = 1000000000000000
     movable = False
+    destructible = False
     id = 'sb_block'
-    color = (127, 0, 127)
+    color = (255, 0, 255)
 
     def __init__(self, x: int, y: int, tick: int):
         self.x = x

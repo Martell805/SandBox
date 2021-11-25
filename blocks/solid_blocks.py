@@ -1,4 +1,5 @@
-from random import shuffle
+from random import shuffle, randint
+
 from blocks.default_blocks import Block
 
 
@@ -6,6 +7,7 @@ class SolidBlock(Block):
     color = (255, 255, 255)
     density = 5000
     movable = True
+    destructible = True
     id = 'sb_solidBlock'
 
     def chooseWayDown(self, field):
@@ -50,3 +52,21 @@ class Stone(SolidBlock):
     color = (200, 200, 200)
     density = 5000
     id = 'sb_stone'
+
+    def check_water(self, field):
+        return 'sb_water' in [field[self.x + q][self.y + w].id for q in [-1, 0, 1] for w in [-1, 0]]
+
+    def update(self, field):
+        way = self.chooseWayDown(field)
+
+        self.updateField(field, way)
+
+        if self.check_water(field) and way == (0, 0) and randint(0, 100) < 1:
+            field.set(self.x, self.y, Sand)
+
+
+class Granite(SolidBlock):
+    color = (173, 165, 135)
+    density = 6000
+    destructible = False
+    id = 'sb_granite'

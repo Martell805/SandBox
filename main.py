@@ -1,39 +1,41 @@
-from os import environ
-
-import pygame
-
 from field import Field
 
 from blocks.default_blocks import Block, Wall
-from blocks.solid_blocks import SolidBlock, Sand, Stone
-from blocks.fluid_blocks import FluidBlock, Void, Water, Oil
+from blocks.solid_blocks import Sand, Stone, Granite
+from blocks.fluid_blocks import Void, Water, Oil, Acid
 from blocks.air_blocks import AirBlock, Gas
 
+
+from os import environ
 environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
+import pygame
+
+
+BLOCK_LIST = [Block, Wall, Sand, Stone, Granite, Water, Oil, Acid, AirBlock, Gas]
 
 
 def pickBlock(event, prev_block):
     match event.key:
         case pygame.K_0:
-            return Block
+            return BLOCK_LIST[0]
         case pygame.K_1:
-            return Wall
+            return BLOCK_LIST[1]
         case pygame.K_2:
-            return SolidBlock
+            return BLOCK_LIST[2]
         case pygame.K_3:
-            return Sand
+            return BLOCK_LIST[3]
         case pygame.K_4:
-            return Stone
+            return BLOCK_LIST[4]
         case pygame.K_5:
-            return FluidBlock
+            return BLOCK_LIST[5]
         case pygame.K_6:
-            return Water
+            return BLOCK_LIST[6]
         case pygame.K_7:
-            return Oil
+            return BLOCK_LIST[7]
         case pygame.K_8:
-            return AirBlock
+            return BLOCK_LIST[8]
         case pygame.K_9:
-            return Gas
+            return BLOCK_LIST[9]
     return prev_block
 
 
@@ -80,16 +82,8 @@ class SandBox:
     def run(self):
         print("Чтобы изменить блок на ЛКМ выберите его номер. На ПКМ всегда ставится Void")
         print("Номера блоков:")
-        print("0. Block")
-        print("1. Wall")
-        print("2. SolidBlock")
-        print("3. Sand")
-        print("4. Stone")
-        print("5. FluidBlock")
-        print("6. Water")
-        print("7. Oil")
-        print("8. AirBlock")
-        print("9. Gas")
+        for q, block_type in enumerate(BLOCK_LIST):
+            print(f"{q}. {type(block_type(0, 0, 0)).__name__}")
 
         while True:
             for event in pygame.event.get():
