@@ -3,7 +3,7 @@ from field import Field
 from blocks.default_blocks import Block, Wall
 from blocks.solid_blocks import Sand, Stone, Granite
 from blocks.fluid_blocks import Void, Water, Oil, Acid
-from blocks.air_blocks import AirBlock, Gas
+from blocks.air_blocks import CarbonicGas, Gas
 
 
 from os import environ
@@ -11,7 +11,7 @@ environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 import pygame
 
 
-BLOCK_LIST = [Block, Wall, Sand, Stone, Granite, Water, Oil, Acid, AirBlock, Gas]
+BLOCK_LIST = [Block, Wall, Sand, Stone, Granite, Water, Oil, Acid, CarbonicGas, Gas]
 
 
 def pickBlock(event, prev_block):
