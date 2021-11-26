@@ -1,4 +1,5 @@
 import os
+
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
 
 import pygame
@@ -9,7 +10,6 @@ from blocks.default_blocks import Block, Wall
 from blocks.solid_blocks import Sand, Stone, Granite
 from blocks.fluid_blocks import Void, Water, Oil, Acid
 from blocks.air_blocks import CarbonicGas, Gas
-
 
 BLOCK_LIST = [Block, Wall, Sand, Stone, Granite, Water, Oil, Acid, CarbonicGas, Gas]
 
@@ -60,14 +60,16 @@ class SandBox:
         self.clock = pygame.time.Clock()
 
     def handle_event(self):
+        x_pos = pygame.mouse.get_pos()[0] // self.TILE_SIZE + 1
+        y_pos = pygame.mouse.get_pos()[1] // self.TILE_SIZE + 1
         if pygame.mouse.get_pressed(3)[0]:
-            self.sb_field.set(pygame.mouse.get_pos()[0] // self.TILE_SIZE + 1,
-                              pygame.mouse.get_pos()[1] // self.TILE_SIZE + 1,
-                              self.selected_block)
+            self.sb_field.set(x_pos, y_pos, self.selected_block)
+        elif pygame.mouse.get_pressed(3)[1]:
+            selected_block = self.sb_field[x_pos][y_pos]
+            if not isinstance(selected_block, Void):
+                self.selected_block = type(selected_block)
         elif pygame.mouse.get_pressed(3)[2]:
-            self.sb_field.set(pygame.mouse.get_pos()[0] // self.TILE_SIZE + 1,
-                              pygame.mouse.get_pos()[1] // self.TILE_SIZE + 1,
-                              Void)
+            self.sb_field.set(x_pos, y_pos, Void)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -94,8 +96,12 @@ class SandBox:
             pygame.display.flip()
 
     def start(self):
-        print("Чтобы поставить мир на паузу нажмите SPACE")
-        print("Чтобы изменить блок на ЛКМ выберите его номер. На ПКМ всегда ставится Void")
+        control_tip = """Управление:
+Чтобы поставить мир на паузу нажмите SPACE
+На ПКМ всегда ставится Void.
+Чтобы изменить блок на ЛКМ выберите его номер либо нажмите СКМ на блок такого-же типа в мире.
+"""
+        print(control_tip)
         print("Номера блоков:")
         for q, block_type in enumerate(BLOCK_LIST):
             print(f"{q}. {type(block_type(0, 0, 0)).__name__}")
