@@ -40,7 +40,7 @@ def pickBlock(event, prev_block):
 
 
 class SandBox:
-    FPS = 60
+    TPS = 30
     FIELD_SIZE = 50
     TILE_SIZE = 16
     selected_block = Sand
@@ -81,12 +81,6 @@ class SandBox:
                 self.selected_block = pickBlock(event, self.selected_block)
 
     def run(self):
-        print("Чтобы поставить мир на паузу нажмите SPACE")
-        print("Чтобы изменить блок на ЛКМ выберите его номер. На ПКМ всегда ставится Void")
-        print("Номера блоков:")
-        for q, block_type in enumerate(BLOCK_LIST):
-            print(f"{q}. {type(block_type(0, 0, 0)).__name__}")
-
         while True:
             self.handle_event()
 
@@ -96,10 +90,19 @@ class SandBox:
 
             self.sb_field.draw(self.screen, self.TILE_SIZE)
 
-            self.clock.tick(30)
+            self.clock.tick(self.TPS)
             pygame.display.flip()
+
+    def start(self):
+        print("Чтобы поставить мир на паузу нажмите SPACE")
+        print("Чтобы изменить блок на ЛКМ выберите его номер. На ПКМ всегда ставится Void")
+        print("Номера блоков:")
+        for q, block_type in enumerate(BLOCK_LIST):
+            print(f"{q}. {type(block_type(0, 0, 0)).__name__}")
+
+        self.run()
 
 
 if __name__ == '__main__':
     sand_box = SandBox()
-    sand_box.run()
+    sand_box.start()
