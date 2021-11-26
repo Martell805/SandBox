@@ -1,14 +1,14 @@
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'hide'
+
+import pygame
+
 from field import Field
 
 from blocks.default_blocks import Block, Wall
 from blocks.solid_blocks import Sand, Stone, Granite
 from blocks.fluid_blocks import Void, Water, Oil, Acid
 from blocks.air_blocks import CarbonicGas, Gas
-
-
-from os import environ
-environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
-import pygame
 
 
 BLOCK_LIST = [Block, Wall, Sand, Stone, Granite, Water, Oil, Acid, CarbonicGas, Gas]
@@ -59,7 +59,7 @@ class SandBox:
 
         self.clock = pygame.time.Clock()
 
-    def handle_event(self, event):
+    def handle_event(self):
         if pygame.mouse.get_pressed(3)[0]:
             self.sb_field.set(pygame.mouse.get_pos()[0] // self.TILE_SIZE + 1,
                               pygame.mouse.get_pos()[1] // self.TILE_SIZE + 1,
@@ -69,25 +69,26 @@ class SandBox:
                               pygame.mouse.get_pos()[1] // self.TILE_SIZE + 1,
                               Void)
 
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
 
-        elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_SPACE:
-                self.pause = not self.pause
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_SPACE:
+                    self.pause = not self.pause
 
-            self.selected_block = pickBlock(event, self.selected_block)
+                self.selected_block = pickBlock(event, self.selected_block)
 
     def run(self):
+        print("Чтобы поставить мир на паузу нажмите SPACE")
         print("Чтобы изменить блок на ЛКМ выберите его номер. На ПКМ всегда ставится Void")
         print("Номера блоков:")
         for q, block_type in enumerate(BLOCK_LIST):
             print(f"{q}. {type(block_type(0, 0, 0)).__name__}")
 
         while True:
-            for event in pygame.event.get():
-                self.handle_event(event)
+            self.handle_event()
 
             if not self.pause:
                 self.sb_field.update()

@@ -22,7 +22,8 @@ class Field:
         return self.field[item]
 
     def set(self, x: int, y: int, block_type: type):
-        self.field[x][y] = block_type(x, y, self.tick)
+        if not isinstance(self.field[x][y], block_type):
+            self.field[x][y] = block_type(x, y, self.tick)
 
     def get(self, x: int, y: int):
         return self.field[x][y]
