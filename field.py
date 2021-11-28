@@ -22,14 +22,13 @@ class Field:
         return self.field[item]
 
     def set(self, x: int, y: int, block_type: type):
-        if not isinstance(self.field[x][y], block_type):
+        if self.field[x][y].__class__ != block_type:
             self.field[x][y] = block_type(x, y, self.tick)
 
     def get(self, x: int, y: int):
         return self.field[x][y]
 
     def update(self):
-
         q_order = list(range(self.size))
         shuffle(q_order)
         w_order = list(range(self.size))
@@ -42,9 +41,11 @@ class Field:
 
     def draw(self, screen: pygame.surface, ts: int):
         temp_screen = pygame.surface.Surface((self.size * ts, self.size * ts))
+        temp_screen.fill((55, 55, 55))
 
         for q in range(self.size):
             for w in range(self.size):
-                self.field[q][w].draw(temp_screen, ts)
+                if self.field[q][w].id != 'sb_void':
+                    self.field[q][w].draw(temp_screen, ts)
 
         screen.blit(temp_screen, (-ts, -ts))

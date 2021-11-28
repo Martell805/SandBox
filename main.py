@@ -13,36 +13,21 @@ from blocks.air_blocks import CarbonicGas, Gas
 
 BLOCK_LIST = [Block, Wall, Sand, Stone, Granite, Water, Oil, Acid, CarbonicGas, Gas]
 
+KEY_LIST = [pygame.K_0, pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5,
+            pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9]
+
 
 def pickBlock(event, prev_block):
-    match event.key:
-        case pygame.K_0:
-            return BLOCK_LIST[0]
-        case pygame.K_1:
-            return BLOCK_LIST[1]
-        case pygame.K_2:
-            return BLOCK_LIST[2]
-        case pygame.K_3:
-            return BLOCK_LIST[3]
-        case pygame.K_4:
-            return BLOCK_LIST[4]
-        case pygame.K_5:
-            return BLOCK_LIST[5]
-        case pygame.K_6:
-            return BLOCK_LIST[6]
-        case pygame.K_7:
-            return BLOCK_LIST[7]
-        case pygame.K_8:
-            return BLOCK_LIST[8]
-        case pygame.K_9:
-            return BLOCK_LIST[9]
-    return prev_block
+    try:
+        return BLOCK_LIST[KEY_LIST.index(event.key)]
+    except ValueError:
+        return prev_block
 
 
 class SandBox:
     TPS = 30
-    FIELD_SIZE = 50
-    TILE_SIZE = 16
+    FIELD_SIZE = 100
+    TILE_SIZE = 8
     selected_block = Sand
 
     def __init__(self):
@@ -52,11 +37,8 @@ class SandBox:
         pygame.display.set_caption('SandBox (tick 0)')
 
         self.screen = pygame.display.set_mode((self.SCREEN_SIZE, self.SCREEN_SIZE))
-
         self.sb_field = Field(self.FIELD_SIZE)
-
         self.pause = False
-
         self.clock = pygame.time.Clock()
 
     def handle_event(self):
@@ -88,7 +70,7 @@ class SandBox:
 
             if not self.pause:
                 self.sb_field.update()
-                pygame.display.set_caption(f'SandBox (tick {self.sb_field.tick})')
+                pygame.display.set_caption(f'SandBox (tick {self.sb_field.tick}) {self.clock.get_fps()} TPS')
 
             self.sb_field.draw(self.screen, self.TILE_SIZE)
 
