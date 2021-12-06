@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from dataclasses import field as f
 
 
-@dataclass(frozen=True, order=True)
+@dataclass(frozen=True)
 class Block:
     id: str = f(default='sb_block', init=False)
     density: int = f(default=1000000000000000, init=False)

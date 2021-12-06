@@ -1,4 +1,4 @@
-# VERSION 2.0.1
+# VERSION 2.0.2
 
 import os
 
@@ -24,6 +24,8 @@ def pickBlock(event, prev_block):
     try:
         return BLOCK_LIST[KEY_LIST.index(event.key)]
     except ValueError:
+        return prev_block
+    except IndexError:
         return prev_block
 
 
