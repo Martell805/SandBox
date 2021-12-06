@@ -2,8 +2,8 @@ from blocks.default_blocks import Block
 
 
 class Wire(Block):
-    destructible = True
     id = 'sb_wire'
+    destructible = True
     color = (255, 255, 255)
 
     def check_for_signals(self, field):
@@ -24,8 +24,8 @@ class Wire(Block):
 
 
 class Signal(Block):
-    destructible = True
     id = 'sb_signal'
+    destructible = True
     color = (255, 255, 0)
 
     def update_wire(self, field):
@@ -33,8 +33,8 @@ class Signal(Block):
 
 
 class SignalTail(Block):
-    destructible = True
     id = 'sb_signalTail'
+    destructible = True
     color = (255, 0, 0)
 
     def update_wire(self, field):

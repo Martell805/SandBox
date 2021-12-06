@@ -29,8 +29,8 @@ def pickBlock(event, prev_block):
 
 class SandBox:
     TPS = 30
-    FIELD_SIZE = 50
-    TILE_SIZE = 16
+    FIELD_SIZE = 100
+    TILE_SIZE = 8
     selected_block = Sand
 
     def __init__(self):

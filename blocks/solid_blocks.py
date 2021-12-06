@@ -4,11 +4,11 @@ from blocks.default_blocks import Block
 
 
 class SolidBlock(Block):
-    color = (255, 255, 255)
+    id = 'sb_solidBlock'
     density = 5000
     movable = True
     destructible = True
-    id = 'sb_solidBlock'
+    color = (255, 255, 255)
 
     def chooseWayDown(self, field):
         neighbour = field[self.x][self.y + 1]
@@ -43,15 +43,15 @@ class SolidBlock(Block):
 
 
 class Sand(SolidBlock):
-    color = (252, 221, 118)
-    density = 3000
     id = 'sb_sand'
+    density = 3000
+    color = (252, 221, 118)
 
 
 class Stone(SolidBlock):
-    color = (200, 200, 200)
-    density = 5000
     id = 'sb_stone'
+    density = 5000
+    color = (200, 200, 200)
 
     def check_water(self, field):
         return 'sb_water' in [field[self.x + q][self.y + w].id for q in [-1, 0, 1] for w in [-1, 0]]

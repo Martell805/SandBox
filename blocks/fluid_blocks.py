@@ -4,9 +4,9 @@ from blocks.solid_blocks import SolidBlock
 
 
 class FluidBlock(SolidBlock):
-    color = (0, 0, 255)
-    density = 500
     id = 'sb_fluidBlock'
+    density = 500
+    color = (0, 0, 255)
 
     def chooseWaySide(self, field):
         ways = [(1, 0), (-1, 0)]
@@ -31,28 +31,28 @@ class FluidBlock(SolidBlock):
 
 
 class Void(FluidBlock):
-    color = (55, 55, 55)
+    id = 'sb_void'
     density = 0
     movable = True
-    id = 'sb_void'
+    color = (55, 55, 55)
 
 
 class Water(FluidBlock):
-    color = (0, 149, 182)
-    density = 1000
     id = 'sb_water'
+    density = 1000
+    color = (0, 149, 182)
 
 
 class Oil(FluidBlock):
-    color = (0, 0, 0)
-    density = 800
     id = 'sb_oil'
+    density = 800
+    color = (0, 0, 0)
 
 
 class Acid(FluidBlock):
-    color = (143, 254, 9)
-    density = 900
     id = 'sb_acid'
+    density = 900
+    color = (143, 254, 9)
 
     def get_random_target(self, field):
         ways = [(0, 1), (0, -1), (1, 0), (-1, 0)]

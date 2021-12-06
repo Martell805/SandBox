@@ -1,17 +1,18 @@
 import pygame
+from dataclasses import dataclass
+from dataclasses import field as f
 
 
+@dataclass(frozen=True, order=True)
 class Block:
-    density = 1000000000000000
-    movable = False
-    destructible = False
-    id = 'sb_block'
-    color = (255, 0, 255)
-
-    def __init__(self, x: int, y: int, tick: int):
-        self.x = x
-        self.y = y
-        self.tick = tick
+    id: str = f(default='sb_block', init=False)
+    density: int = f(default=1000000000000000, init=False)
+    movable: bool = f(default=False, init=False)
+    destructible: bool = f(default=False, init=False)
+    color: tuple[int, int, int] = f(default=(255, 0, 255), init=False)
+    x: int
+    y: int
+    tick: int
 
     def __repr__(self):
         return f"{self.id}: {(self.x, self.y)}"
@@ -28,6 +29,5 @@ class Block:
 
 
 class Wall(Block):
-    color = (136, 69, 53)
     id = 'sb_wall'
-
+    color = (136, 69, 53)
