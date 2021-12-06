@@ -16,6 +16,9 @@ class Block:
     def __repr__(self):
         return f"{self.id}: {(self.x, self.y)}"
 
+    def update_wire(self, field):
+        return None
+
     def update(self, field):
         pass
 

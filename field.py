@@ -11,12 +11,13 @@ class Field:
     def __init__(self, size: int):
         self.size = size + 2
 
-        self.field = [[Void(q, w, self.tick) for w in range(self.size)] for q in range(self.size)]
+        self.field = [[Void(x, y, self.tick) for x in range(self.size)] for y in range(self.size)]
+        self.wire_changes = [[None for _ in range(self.size)] for _ in range(self.size)]
 
-        for q in range(self.size):
-            for w in range(self.size):
-                if q == 0 or q == self.size - 1 or w == 0 or w == self.size - 1:
-                    self.field[q][w] = Wall(q, w, self.tick)
+        for x in range(self.size):
+            for y in range(self.size):
+                if x == 0 or x == self.size - 1 or y == 0 or y == self.size - 1:
+                    self.set(x, y, Wall)
 
     def __getitem__(self, item: int) -> list:
         return self.field[item]
@@ -27,25 +28,37 @@ class Field:
 
     def get(self, x: int, y: int):
         return self.field[x][y]
+    
+    def update_wire(self):
+        for x in range(self.size):
+            for y in range(self.size):
+                self.wire_changes[x][y] = self.field[x][y].update_wire(self.field)
 
     def update(self):
-        q_order = list(range(self.size))
-        shuffle(q_order)
-        w_order = list(range(self.size))
-        shuffle(w_order)
+        if self.tick % 2 == 0:
+            self.update_wire()
 
-        for q in q_order:
-            for w in w_order:
-                self.field[q][w].update(self)
+        x_order = list(range(self.size))
+        shuffle(x_order)
+        y_order = list(range(self.size))
+        shuffle(y_order)
+
+        for x in x_order:
+            for y in y_order:
+                if self.wire_changes[x][y] is not None:
+                    self.set(x, y, self.wire_changes[x][y])
+                    self.wire_changes[x][y] = None
+                self.field[x][y].update(self)
+            
         self.tick += 1
 
     def draw(self, screen: pygame.surface, ts: int):
         temp_screen = pygame.surface.Surface((self.size * ts, self.size * ts))
         temp_screen.fill((55, 55, 55))
 
-        for q in range(self.size):
-            for w in range(self.size):
-                if self.field[q][w].id != 'sb_void':
-                    self.field[q][w].draw(temp_screen, ts)
+        for x in range(self.size):
+            for y in range(self.size):
+                if self.field[x][y].id != 'sb_void':
+                    self.field[x][y].draw(temp_screen, ts)
 
         screen.blit(temp_screen, (-ts, -ts))
