@@ -12,7 +12,7 @@ class Wire(Block):
             for dy in range(-1, 2):
                 if (dx, dy) == (0, 0):
                     continue
-                signal_count += int(isinstance(field[self.x + dx][self.y + dy], Signal))
+                signal_count += int(field[self.x + dx][self.y + dy].electrified)
                 if signal_count > 2:
                     return False
         return bool(signal_count)
@@ -26,6 +26,7 @@ class Wire(Block):
 class Signal(Block):
     id = 'sb_signal'
     destructible = True
+    electrified = True
     color = (255, 255, 0)
 
     def update_wire(self, field):

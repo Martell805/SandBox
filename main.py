@@ -1,4 +1,4 @@
-# VERSION 2.0.2
+# VERSION 2.0.3
 
 import os
 
@@ -20,19 +20,10 @@ KEY_LIST = [pygame.K_0, pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K
             pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9, pygame.K_q, pygame.K_w]
 
 
-def pickBlock(event, prev_block):
-    try:
-        return BLOCK_LIST[KEY_LIST.index(event.key)]
-    except ValueError:
-        return prev_block
-    except IndexError:
-        return prev_block
-
-
 class SandBox:
     TPS = 30
-    FIELD_SIZE = 100
-    TILE_SIZE = 8
+    FIELD_SIZE = 50
+    TILE_SIZE = 16
     selected_block = Sand
 
     def __init__(self):
@@ -46,7 +37,13 @@ class SandBox:
         self.pause = False
         self.clock = pygame.time.Clock()
 
-    def handle_event(self):
+    def pickBlock(self, key):
+        try:
+            return BLOCK_LIST[KEY_LIST.index(key)]
+        except (ValueError, IndexError):
+            return self.selected_block
+
+    def handle_events(self):
         x_pos = pygame.mouse.get_pos()[0] // self.TILE_SIZE + 1
         y_pos = pygame.mouse.get_pos()[1] // self.TILE_SIZE + 1
         if pygame.mouse.get_pressed(3)[0]:
@@ -67,15 +64,15 @@ class SandBox:
                 if event.key == pygame.K_SPACE:
                     self.pause = not self.pause
 
-                self.selected_block = pickBlock(event, self.selected_block)
+                self.selected_block = self.pickBlock(event.key)
 
     def run(self):
         while True:
             if not self.pause:
                 self.sb_field.update()
-                pygame.display.set_caption(f'SandBox (tick {self.sb_field.tick}) {self.clock.get_fps()} TPS')
+                pygame.display.set_caption(f'SandBox (tick {self.sb_field.tick}) {self.clock.get_fps():.2f} TPS')
 
-            self.handle_event()
+            self.handle_events()
 
             self.sb_field.draw(self.screen, self.TILE_SIZE)
 
@@ -83,15 +80,13 @@ class SandBox:
             pygame.display.flip()
 
     def start(self):
-        control_tip = """Управление:
-Чтобы поставить мир на паузу нажмите SPACE
-На ПКМ всегда ставится Void.
-Чтобы изменить блок на ЛКМ выберите его номер либо нажмите СКМ на блок такого-же типа в мире.
-"""
+        control_tip = "Управление: \n" \
+                      "Чтобы поставить мир на паузу нажмите SPACE На ПКМ всегда ставится Void. \n" \
+                      "Чтобы изменить блок на ЛКМ выберите его номер либо нажмите СКМ на блок такого-же типа в мире."
         print(control_tip)
         print("Номера блоков (больше 9 - буква в 1 ряду клавиатуры):")
         for q, block_type in enumerate(BLOCK_LIST):
-            print(f"{q}. {type(block_type(0, 0, 0)).__name__}")
+            print(f"{q}. {block_type.__name__}")
 
         self.run()
 

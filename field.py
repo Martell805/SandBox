@@ -23,18 +23,22 @@ class Field:
         return self.field[item]
 
     def set(self, x: int, y: int, block_type: type):
+        """Sets block of block_type in (x, y)"""
         if self.field[x][y].__class__ != block_type:
             self.field[x][y] = block_type(x, y, self.tick)
 
     def get(self, x: int, y: int):
+        """Returns block in (x, y)"""
         return self.field[x][y]
     
     def update_wire(self):
+        """Updates all wire on field"""
         for x in range(self.size):
             for y in range(self.size):
                 self.wire_changes[x][y] = self.field[x][y].update_wire(self.field)
 
     def update(self):
+        """Updates all blocks on field"""
         if self.tick % 2 == 0:
             self.update_wire()
 
@@ -53,6 +57,7 @@ class Field:
         self.tick += 1
 
     def draw(self, screen: pygame.surface, ts: int):
+        """Draws all blocks on field"""
         temp_screen = pygame.surface.Surface((self.size * ts, self.size * ts))
         temp_screen.fill((55, 55, 55))
 
