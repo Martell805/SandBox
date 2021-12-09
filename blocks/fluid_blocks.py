@@ -22,6 +22,9 @@ class FluidBlock(SolidBlock):
         return 0, 0
 
     def update(self, field):
+        if not self.movable:
+            return
+
         way = self.chooseWayDown(field)
 
         if way == (0, 0):
@@ -72,10 +75,12 @@ class Acid(FluidBlock):
                 field.set(self.x, self.y, Void)
                 return
 
+        if not self.movable:
+            return
+
         way = self.chooseWayDown(field)
 
         if way == (0, 0):
             way = self.chooseWaySide(field)
 
         self.updateField(field, way)
-

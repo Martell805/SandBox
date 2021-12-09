@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from dataclasses import field as f
 
 
-@dataclass(frozen=True)
+@dataclass()
 class Block:
     id: str = f(default='sb_block', init=False)
     density: int = f(default=1000000000000000, init=False)
@@ -17,6 +17,9 @@ class Block:
 
     def __repr__(self):
         return f"{self.id}: {(self.x, self.y)}"
+
+    def lock(self, locked=False):
+        self.movable = locked
 
     def update_wire(self, field):
         """Updates block in wire update"""

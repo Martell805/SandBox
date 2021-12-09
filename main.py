@@ -1,4 +1,4 @@
-# VERSION 2.0.3
+# VERSION 2.1.0
 
 import os
 
@@ -12,12 +12,15 @@ from blocks.default_blocks import Block, Wall
 from blocks.solid_blocks import Sand, Stone, Granite
 from blocks.fluid_blocks import Void, Water, Oil, Acid
 from blocks.air_blocks import CarbonicGas, Gas
-from blocks.wire_blocks import Wire, Signal
+from blocks.wire_blocks import Wire, Signal, Detector, Creator
 
-BLOCK_LIST = [Block, Wall, Sand, Stone, Granite, Water, Oil,  Acid, CarbonicGas, Gas, Wire, Signal]
+BLOCK_LIST = [Wall, Sand, Stone, Granite, Water,
+              Oil,  Acid, CarbonicGas, Gas, Wire,
+              Signal, Detector, Creator]
 
 KEY_LIST = [pygame.K_0, pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5,
-            pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9, pygame.K_q, pygame.K_w]
+            pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9, pygame.K_q, pygame.K_w,
+            pygame.K_e, pygame.K_r, pygame.K_t, pygame.K_y, pygame.K_u, pygame.K_i]
 
 
 class SandBox:
@@ -82,11 +85,11 @@ class SandBox:
     def start(self):
         control_tip = "Управление: \n" \
                       "Чтобы поставить мир на паузу нажмите SPACE На ПКМ всегда ставится Void. \n" \
-                      "Чтобы изменить блок на ЛКМ выберите его номер либо нажмите СКМ на блок такого-же типа в мире."
+                      "Чтобы изменить блок на ЛКМ выберите егоб нажав на клавишу, указанную в списке."
         print(control_tip)
-        print("Номера блоков (больше 9 - буква в 1 ряду клавиатуры):")
+        print("Список блоков:")
         for q, block_type in enumerate(BLOCK_LIST):
-            print(f"{q}. {block_type.__name__}")
+            print(f"{pygame.key.name(KEY_LIST[q])}. {block_type.__name__}")
 
         self.run()
 

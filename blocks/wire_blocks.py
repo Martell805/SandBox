@@ -1,4 +1,5 @@
 from blocks.default_blocks import Block
+from blocks.fluid_blocks import Void
 
 
 class Wire(Block):
@@ -6,7 +7,7 @@ class Wire(Block):
     destructible = True
     color = (255, 255, 255)
 
-    def check_for_signals(self, field):
+    def check_for_electrified(self, field):
         signal_count = 0
         for dx in range(-1, 2):
             for dy in range(-1, 2):
@@ -18,7 +19,7 @@ class Wire(Block):
         return bool(signal_count)
 
     def update_wire(self, field):
-        if self.check_for_signals(field):
+        if self.check_for_electrified(field):
             return Signal
         return None
 
@@ -40,3 +41,43 @@ class SignalTail(Block):
 
     def update_wire(self, field):
         return Wire
+
+
+class Detector(Block):
+    id = 'sb_detector'
+    destructible = False
+    color = (100, 100, 100)
+
+    def check_same_neighbours(self, field):
+        neighbours = [(self.x, self.y - 1), (self.x + 1, self.y), (self.x - 1, self.y)]
+        target_class = field[self.x][self.y + 1].__class__
+
+        if target_class == Void:
+            return False
+
+        for neighbour in neighbours:
+            if field[neighbour[0]][neighbour[1]].__class__ == target_class:
+                return True
+        return False
+
+    def update_wire(self, field):
+        field[self.x][self.y + 1].lock()
+
+        self.electrified = self.check_same_neighbours(field)
+        return None
+
+
+class Creator(Wire):
+    id = 'sb_detector'
+    destructible = False
+    color = (100, 0, 100)
+
+    def update_wire(self, field):
+        field[self.x][self.y - 1].lock()
+
+        return None
+
+    def update(self, field):
+        target_class = field[self.x][self.y - 1].__class__
+        if target_class != Void and self.check_for_electrified(field):
+            field.set(self.x, self.y + 1, target_class)
