@@ -56,7 +56,7 @@ class Stone(SolidBlock):
     color = (200, 200, 200)
 
     def check_water(self, field):
-        return 'sb_water' in [field[self.x + q][self.y + w].id for q in [-1, 0, 1] for w in [-1, 0]]
+        return 'sb_water' in (field[self.x + q][self.y + w].id for q in [-1, 0, 1] for w in [-1, 0])
 
     def update(self, field):
         way = (0, 0)

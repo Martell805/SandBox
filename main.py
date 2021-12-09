@@ -1,4 +1,4 @@
-# VERSION 2.1.0
+# VERSION 2.1.1
 
 import os
 
@@ -8,15 +8,15 @@ import pygame
 
 from field import Field
 
-from blocks.default_blocks import Block, Wall
+from blocks.default_blocks import Wall
 from blocks.solid_blocks import Sand, Stone, Granite
 from blocks.fluid_blocks import Void, Water, Oil, Acid
 from blocks.air_blocks import CarbonicGas, Gas
-from blocks.wire_blocks import Wire, Signal, Detector, Creator
+from blocks.wire_blocks import Wire, Signal, Detector, Creator, Spark
 
 BLOCK_LIST = [Wall, Sand, Stone, Granite, Water,
               Oil,  Acid, CarbonicGas, Gas, Wire,
-              Signal, Detector, Creator]
+              Signal, Detector, Creator, Spark]
 
 KEY_LIST = [pygame.K_0, pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5,
             pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9, pygame.K_q, pygame.K_w,

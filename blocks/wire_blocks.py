@@ -1,5 +1,6 @@
 from blocks.default_blocks import Block
 from blocks.fluid_blocks import Void
+from blocks.solid_blocks import SolidBlock
 
 
 class Wire(Block):
@@ -22,6 +23,24 @@ class Wire(Block):
         if self.check_for_electrified(field):
             return Signal
         return None
+
+
+class Spark(SolidBlock):
+    id = 'sb_spark'
+    density = 1
+    electrified = True
+    color = (255, 255, 0)
+
+    def update(self, field):
+        if not self.movable:
+            return
+
+        way = self.chooseWayDown(field)
+
+        if way == (0, 0):
+            field.set(self.x, self.y, Void)
+
+        self.updateField(field, way)
 
 
 class Signal(Block):
@@ -79,5 +98,5 @@ class Creator(Wire):
 
     def update(self, field):
         target_class = field[self.x][self.y - 1].__class__
-        if target_class != Void and self.check_for_electrified(field):
+        if target_class != Void and self.check_for_electrified(field) and field[self.x][self.y + 1].destructible:
             field.set(self.x, self.y + 1, target_class)

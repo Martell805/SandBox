@@ -39,8 +39,7 @@ class Field:
 
     def update(self):
         """Updates all blocks on field"""
-        if self.tick % 2 == 0:
-            self.update_wire()
+        self.update_wire()
 
         x_order = list(range(self.size))
         shuffle(x_order)
