@@ -36,7 +36,6 @@ class FluidBlock(SolidBlock):
 class Void(FluidBlock):
     id = 'sb_void'
     density = 0
-    movable = True
     color = (55, 55, 55)
 
 

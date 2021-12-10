@@ -7,7 +7,7 @@ class AirBlock(FluidBlock):
     color = (200, 200, 200)
 
 
-class CarbonicGas(FluidBlock):
+class CarbonicGas(AirBlock):
     id = 'sb_carbonicGas'
     density = -500
     color = (236, 240, 241)

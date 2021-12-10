@@ -1,4 +1,4 @@
-# VERSION 2.1.1
+# VERSION 2.1.2
 
 import os
 
@@ -27,7 +27,8 @@ class SandBox:
     TPS = 30
     FIELD_SIZE = 50
     TILE_SIZE = 16
-    selected_block = Sand
+    selected_block_type = Sand
+    selected_block = Sand(0, 0, 0)
 
     def __init__(self):
         self.SCREEN_SIZE = self.FIELD_SIZE * self.TILE_SIZE
@@ -44,17 +45,18 @@ class SandBox:
         try:
             return BLOCK_LIST[KEY_LIST.index(key)]
         except (ValueError, IndexError):
-            return self.selected_block
+            return self.selected_block_type
 
     def handle_events(self):
         x_pos = pygame.mouse.get_pos()[0] // self.TILE_SIZE + 1
         y_pos = pygame.mouse.get_pos()[1] // self.TILE_SIZE + 1
         if pygame.mouse.get_pressed(3)[0]:
-            self.sb_field.set(x_pos, y_pos, self.selected_block)
+            self.sb_field.set(x_pos, y_pos, self.selected_block_type)
         elif pygame.mouse.get_pressed(3)[1]:
             selected_block = self.sb_field[x_pos][y_pos]
-            if not isinstance(selected_block, Void):
-                self.selected_block = type(selected_block)
+            if not isinstance(selected_block, (Void, self.selected_block_type)):
+                self.selected_block_type = type(selected_block)
+            print(f"Вы выбрали {selected_block}")
         elif pygame.mouse.get_pressed(3)[2]:
             self.sb_field.set(x_pos, y_pos, Void)
 
@@ -67,7 +69,7 @@ class SandBox:
                 if event.key == pygame.K_SPACE:
                     self.pause = not self.pause
 
-                self.selected_block = self.pickBlock(event.key)
+                self.selected_block_type = self.pickBlock(event.key)
 
     def run(self):
         while True:

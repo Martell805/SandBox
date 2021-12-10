@@ -11,7 +11,7 @@ class Field:
     def __init__(self, size: int):
         self.size = size + 2
 
-        self.field = [[Void(x, y, self.tick) for x in range(self.size)] for y in range(self.size)]
+        self.field = [[Void(x, y, self.tick) for y in range(self.size)] for x in range(self.size)]
         self.wire_changes = [[None for _ in range(self.size)] for _ in range(self.size)]
 
         for x in range(self.size):
@@ -36,6 +36,8 @@ class Field:
         for x in range(self.size):
             for y in range(self.size):
                 self.wire_changes[x][y] = self.field[x][y].update_wire(self.field)
+                if self.wire_changes[x][y] is not None:
+                    print(self.wire_changes[x][y])
 
     def update(self):
         """Updates all blocks on field"""
