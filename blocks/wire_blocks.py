@@ -40,7 +40,7 @@ class Spark(SolidBlock):
         if way == (0, 0):
             field.set(self.x, self.y, Void)
 
-        self.updateField(field, way)
+        self.move(field, way)
 
 
 class Signal(Block):

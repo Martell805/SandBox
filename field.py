@@ -57,14 +57,14 @@ class Field:
             
         self.tick += 1
 
-    def draw(self, screen: pygame.surface, ts: int):
+    def draw(self, screen: pygame.surface, tile_size: int):
         """Draws all blocks on field"""
-        temp_screen = pygame.surface.Surface((self.size * ts, self.size * ts))
+        temp_screen = pygame.surface.Surface((self.size * tile_size, self.size * tile_size))
         temp_screen.fill((55, 55, 55))
 
         for x in range(self.size):
             for y in range(self.size):
                 if self.field[x][y].id != 'sb_void':
-                    self.field[x][y].draw(temp_screen, ts)
+                    self.field[x][y].draw(temp_screen, tile_size)
 
-        screen.blit(temp_screen, (-ts, -ts))
+        screen.blit(temp_screen, (-tile_size, -tile_size))

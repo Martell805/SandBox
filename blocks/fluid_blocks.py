@@ -30,7 +30,7 @@ class FluidBlock(SolidBlock):
         if way == (0, 0):
             way = self.chooseWaySide(field)
 
-        self.updateField(field, way)
+        self.move(field, way)
 
 
 class Void(FluidBlock):
@@ -64,7 +64,7 @@ class Acid(FluidBlock):
                 return way
         return 0, 0
 
-    def update(self, field):
+    def destroy_random_neighbour(self, field):
         destruct_way = self.get_random_target(field)
 
         if destruct_way != (0, 0) and randint(0, 100) < 5 \
@@ -72,7 +72,13 @@ class Acid(FluidBlock):
             field.set(self.x + destruct_way[0], self.y + destruct_way[1], Void)
             if randint(0, 100) < 20:
                 field.set(self.x, self.y, Void)
-                return
+                return True
+
+        return False
+
+    def update(self, field):
+        if self.destroy_random_neighbour(field):
+            return
 
         if not self.movable:
             return
@@ -82,4 +88,4 @@ class Acid(FluidBlock):
         if way == (0, 0):
             way = self.chooseWaySide(field)
 
-        self.updateField(field, way)
+        self.move(field, way)

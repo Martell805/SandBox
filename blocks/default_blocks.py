@@ -18,8 +18,8 @@ class Block:
     def __repr__(self):
         return f"{self.id}: {(self.x, self.y)}"
 
-    def lock(self, locked=False):
-        self.movable = locked
+    def lock(self, unlocked=False):
+        self.movable = unlocked
 
     def update_wire(self, field):
         """Updates block in wire update"""

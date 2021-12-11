@@ -27,7 +27,7 @@ class SolidBlock(Block):
 
         return 0, 0
 
-    def updateField(self, field, way):
+    def move(self, field, way):
         if way == (0, 0):
             return
 
@@ -41,7 +41,7 @@ class SolidBlock(Block):
             return
 
         way = self.chooseWayDown(field)
-        self.updateField(field, way)
+        self.move(field, way)
 
 
 class Sand(SolidBlock):
@@ -63,7 +63,7 @@ class Stone(SolidBlock):
 
         if self.movable:
             way = self.chooseWayDown(field)
-            self.updateField(field, way)
+            self.move(field, way)
 
         if self.check_water(field) and way == (0, 0) and randint(0, 100) < 1:
             field.set(self.x, self.y, Sand)
