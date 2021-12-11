@@ -1,4 +1,4 @@
-# VERSION 2.1.3
+# VERSION 2.1.4
 
 import os
 
@@ -14,14 +14,6 @@ from blocks.fluid_blocks import Void, Water, Oil, Acid
 from blocks.air_blocks import CarbonicGas, Gas
 from blocks.wire_blocks import Wire, Signal, Detector, Creator, Spark
 
-BLOCK_LIST = [Wall, Sand, Stone, Granite, Water,
-              Oil,  Acid, CarbonicGas, Gas, Wire,
-              Signal, Detector, Creator, Spark]
-
-KEY_LIST = [pygame.K_0, pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5,
-            pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9, pygame.K_q, pygame.K_w,
-            pygame.K_e, pygame.K_r, pygame.K_t, pygame.K_y, pygame.K_u, pygame.K_i]
-
 
 class SandBox:
     TPS = 30
@@ -29,6 +21,14 @@ class SandBox:
     TILE_SIZE = 16
     selected_block_type = Sand
     selected_block = Sand(0, 0, 0)
+
+    BLOCK_LIST = [Wall, Sand, Stone, Granite, Water,
+                  Oil,  Acid, CarbonicGas, Gas, Wire,
+                  Signal, Detector, Creator, Spark]
+
+    KEY_LIST = [pygame.K_0, pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5,
+                pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9, pygame.K_q, pygame.K_w,
+                pygame.K_e, pygame.K_r, pygame.K_t, pygame.K_y, pygame.K_u, pygame.K_i]
 
     def __init__(self):
         self.SCREEN_SIZE = self.FIELD_SIZE * self.TILE_SIZE
@@ -43,7 +43,7 @@ class SandBox:
 
     def pickBlock(self, key):
         try:
-            return BLOCK_LIST[KEY_LIST.index(key)]
+            return self.BLOCK_LIST[self.KEY_LIST.index(key)]
         except (ValueError, IndexError):
             return self.selected_block_type
 
@@ -90,8 +90,8 @@ class SandBox:
                       "Чтобы изменить блок на ЛКМ выберите егоб нажав на клавишу, указанную в списке."
         print(control_tip)
         print("Список блоков:")
-        for q, block_type in enumerate(BLOCK_LIST):
-            print(f"{pygame.key.name(KEY_LIST[q])}. {block_type.__name__}")
+        for q, block_type in enumerate(self.BLOCK_LIST):
+            print(f"{pygame.key.name(self.KEY_LIST[q])}. {block_type.__name__}")
 
         self.run()
 

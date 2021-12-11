@@ -1,5 +1,5 @@
 import pygame.surface
-from blocks.default_blocks import Wall
+from blocks.default_blocks import Wall, Block
 from blocks.fluid_blocks import Void
 
 from random import shuffle
@@ -19,15 +19,15 @@ class Field:
                 if x == 0 or x == self.size - 1 or y == 0 or y == self.size - 1:
                     self.set(x, y, Wall)
 
-    def __getitem__(self, item: int) -> list:
+    def __getitem__(self, item: int) -> list[Block]:
         return self.field[item]
 
-    def set(self, x: int, y: int, block_type: type):
+    def set(self, x: int, y: int, block_type: type) -> None:
         """Sets block of block_type in (x, y)"""
         if self.field[x][y].__class__ != block_type:
             self.field[x][y] = block_type(x, y, self.tick)
 
-    def get(self, x: int, y: int):
+    def get(self, x: int, y: int) -> Block:
         """Returns block in (x, y)"""
         return self.field[x][y]
     
@@ -36,8 +36,6 @@ class Field:
         for x in range(self.size):
             for y in range(self.size):
                 self.wire_changes[x][y] = self.field[x][y].update_wire(self.field)
-                if self.wire_changes[x][y] is not None:
-                    print(self.wire_changes[x][y])
 
     def update(self):
         """Updates all blocks on field"""
