@@ -1,4 +1,4 @@
-# VERSION 3.1.0
+# VERSION 3.2.0
 
 import os
 
@@ -11,12 +11,17 @@ from config import *
 from new_field import Field
 
 from new_blocks.default_blocks import Wall, Void
-from new_blocks.solid_blocks import Sand, Stone, Granite, Ice
+from new_blocks.solid_blocks import Sand, Stone, Granite, Ice, BlackSand
 from new_blocks.fluid_blocks import Water, Oil, Acid
+from new_blocks.gas_blocks import CarbonicGas, Gas
 
 
 class SandBox:
-    BLOCK_LIST = [Wall, Sand, Stone, Granite, Ice, Water, Oil, Acid]
+    BLOCK_LIST = [
+        Wall, Sand, Stone, Granite, BlackSand,
+        Ice, Water, Oil, Acid,
+        CarbonicGas, Gas
+    ]
 
     KEY_LIST = [pygame.K_0, pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5,
                 pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9, pygame.K_q, pygame.K_w,

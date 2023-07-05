@@ -32,7 +32,7 @@ class FluidBlock(SolidBlock):
 
         return False
 
-    def go_down_or_side(self, neighbours) -> bool:
+    def go_down_then_side(self, neighbours) -> bool:
         if self.go_down(neighbours):
             return True
 
@@ -45,7 +45,7 @@ class FluidBlock(SolidBlock):
         if not self.movable:
             return
 
-        if self.go_down_or_side(neighbours):
+        if self.go_down_then_side(neighbours):
             return
 
 
@@ -100,5 +100,5 @@ class Acid(FluidBlock):
         if self.destroy_random_neighbour(neighbours):
             return
 
-        if self.go_down_or_side(neighbours):
+        if self.go_down_then_side(neighbours):
             return
