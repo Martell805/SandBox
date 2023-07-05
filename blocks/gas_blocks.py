@@ -1,10 +1,10 @@
 from random import shuffle
 
-from new_blocks.fluid_blocks import FluidBlock
+from blocks.fluid_blocks import FluidBlock
 
 
 class GasBlock(FluidBlock):
-    id = 'sbn_gas_block'
+    id = 'sb_gas_block'
     density = 50
     durability = 100
     color = (200, 200, 200)
@@ -30,12 +30,12 @@ class GasBlock(FluidBlock):
 
 
 class CarbonicGas(GasBlock):
-    id = 'sbn_carbonicGas'
+    id = 'sb_carbonicGas'
     density = 500
     color = (30, 30, 30)
 
 
 class Gas(GasBlock):
-    id = 'sbn_gas'
+    id = 'sb_gas'
     density = 200
     color = (100, 200, 0)

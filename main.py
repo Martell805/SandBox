@@ -1,4 +1,4 @@
-# VERSION 3.2.0
+# VERSION 3.2.1
 
 import os
 
@@ -8,12 +8,12 @@ import pygame
 
 from config import *
 
-from new_field import Field
+from field import Field
 
-from new_blocks.default_blocks import Wall, Void
-from new_blocks.solid_blocks import Sand, Stone, Granite, Ice, BlackSand
-from new_blocks.fluid_blocks import Water, Oil, Acid
-from new_blocks.gas_blocks import CarbonicGas, Gas
+from blocks.default_blocks import Wall, Void
+from blocks.solid_blocks import Sand, Stone, Granite, Ice, BlackSand
+from blocks.fluid_blocks import Water, Oil, Acid
+from blocks.gas_blocks import CarbonicGas, Gas
 
 
 class SandBox:

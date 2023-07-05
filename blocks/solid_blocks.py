@@ -1,76 +1,93 @@
-from random import shuffle, randint
+from random import shuffle
 
+from cell import Cell
 from blocks.default_blocks import Block
 
 
 class SolidBlock(Block):
-    id = 'sb_solidBlock'
+    id = 'sb_solid_block'
     density = 5000
+    durability = 5000
     movable = True
-    destructible = True
     color = (255, 255, 255)
 
-    def chooseWayDown(self, field):
-        neighbour = field[self.x][self.y + 1]
-        if neighbour.density < self.density and neighbour.movable:
-            return 0, 1
+    def can_move_in_cell(self, cell: Cell) -> bool:
+        return cell.contains.movable and cell.contains.density < self.density
 
-        ways = [(1, 1), (-1, 1)]
+    def can_update_cell(self, cell: Cell) -> bool:
+        return cell.is_free() and self.can_move_in_cell(cell)
+
+    def go_down_straight(self, neighbours: list[list[Cell]]) -> bool:
+        if self.can_move_in_cell(neighbours[2][1]):
+            neighbours[2][1].calculated = self
+            neighbours[1][1].calculated = neighbours[2][1].contains
+            return True
+
+        return False
+
+    def go_down_diagonal(self, neighbours: list[list[Cell]]) -> bool:
+        ways = [0, 2]
         shuffle(ways)
-        neighbours = [field[self.x + ways[0][0]][self.y + ways[0][1]],
-                      field[self.x + ways[1][0]][self.y + ways[1][1]]]
 
-        if neighbours[0].density < self.density and neighbours[0].movable:
-            return ways[0]
-        elif neighbours[1].density < self.density and neighbours[1].movable:
-            return ways[1]
+        if self.can_move_in_cell(neighbours[1][ways[0]]) and self.can_update_cell(neighbours[2][ways[0]]):
+            neighbours[2][ways[0]].calculated = self
+            neighbours[1][1].calculated = neighbours[2][ways[0]].contains
+            return True
 
-        return 0, 0
+        if self.can_move_in_cell(neighbours[1][ways[1]]) and self.can_update_cell(neighbours[2][ways[1]]):
+            neighbours[2][ways[1]].calculated = self
+            neighbours[1][1].calculated = neighbours[2][ways[1]].contains
+            return True
 
-    def move(self, field, way):
-        if way == (0, 0):
-            return
+        return False
 
-        neighbour = field[self.x + way[0]][self.y + way[1]]
-        if self.tick != field.tick and neighbour.tick != field.tick:
-            field.set(self.x)
-            field.set(self.x + way[0])
+    def go_down(self, neighbours: list[list[Cell]]) -> bool:
+        if self.go_down_straight(neighbours):
+            return True
 
-    def update(self, field):
+        if self.go_down_diagonal(neighbours):
+            return True
+
+        return False
+
+    def update(self, neighbours: list[list[Cell]]) -> None:
         if not self.movable:
             return
 
-        way = self.chooseWayDown(field)
-        self.move(field, way)
+        if self.go_down(neighbours):
+            return
 
 
 class Sand(SolidBlock):
     id = 'sb_sand'
     density = 3000
+    durability = 3000
     color = (252, 221, 118)
 
 
 class Stone(SolidBlock):
     id = 'sb_stone'
     density = 5000
+    durability = 5000
     color = (200, 200, 200)
-
-    def check_water(self, field):
-        return 'sb_water' in (field[self.x + q][self.y + w].id for q in [-1, 0, 1] for w in [-1, 0])
-
-    def update(self, field):
-        way = (0, 0)
-
-        if self.movable:
-            way = self.chooseWayDown(field)
-            self.move(field, way)
-
-        if self.check_water(field) and way == (0, 0) and randint(0, 100) < 1:
-            field.set(self.x)
 
 
 class Granite(SolidBlock):
     color = (173, 165, 135)
-    density = 6000
-    destructible = False
+    density = 11000
+    durability = 11000
     id = 'sb_granite'
+
+
+class Ice(SolidBlock):
+    id = 'sb_ice'
+    density = 900
+    durability = 900
+    color = (219, 241, 253)
+
+
+class BlackSand(Sand):
+    id = 'sb_black_sand'
+    density = 3000
+    durability = 3000
+    color = (20, 10, 5)

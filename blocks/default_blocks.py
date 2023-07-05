@@ -1,40 +1,43 @@
 import pygame
-from dataclasses import dataclass
-from dataclasses import field as f
+
+from config import TILE_SIZE
 
 
-@dataclass()
 class Block:
-    id: str = f(default='sb_block', init=False)
-    density: int = f(default=1000000000000000, init=False)
-    movable: bool = f(default=False, init=False)
-    destructible: bool = f(default=False, init=False)
-    electrified: bool = f(default=False, init=False)
-    color: tuple[int, int, int] = f(default=(255, 0, 255), init=False)
-    x: int
-    y: int
-    tick: int
+    id: str = 'sb_block'
+    density: int = 1000000000000000
+    durability: int = 1000000000000000
+
+    movable: bool = False
+    electrified: bool = False
+    simple: bool = True
+    color: tuple[int, int, int] = (255, 0, 255)
+    surface: pygame.Surface = pygame.Surface((TILE_SIZE, TILE_SIZE))
 
     def __repr__(self):
-        return f"{self.id}: {(self.x, self.y)}"
+        return f"{self.id}"
 
     def lock(self, unlocked=False):
         self.movable = unlocked
 
-    def update_wire(self, field):
-        """Updates block in wire update"""
-        return None
-
-    def update(self, field):
-        """Updates block in field update"""
+    def update(self, neighbours):
         pass
 
-    def draw(self, surface: pygame.surface, tile_size: int):
-        """Draws block on surface"""
-        pygame.draw.rect(surface, self.color,
-                         (self.x * tile_size, self.y * tile_size, tile_size, tile_size))
+    def draw(self):
+        self.surface.fill(self.color)
+        return self.surface
 
 
 class Wall(Block):
     id = 'sb_wall'
     color = (136, 69, 53)
+
+
+class Void(Block):
+    id = 'sb_void'
+    density = 0
+    color = (55, 55, 55)
+    updates = False
+    movable = True
+
+

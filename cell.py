@@ -1,7 +1,7 @@
 import pygame
 
 from config import TILE_SIZE
-from new_blocks.default_blocks import Block
+from blocks.default_blocks import Block
 
 
 class Cell:
