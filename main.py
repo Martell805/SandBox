@@ -1,4 +1,4 @@
-# VERSION 3.0.0
+# VERSION 3.1.0
 
 import os
 
@@ -11,11 +11,12 @@ from config import *
 from new_field import Field
 
 from new_blocks.default_blocks import Wall, Void
-from new_blocks.solid_blocks import Sand, Stone, Granite
+from new_blocks.solid_blocks import Sand, Stone, Granite, Ice
+from new_blocks.fluid_blocks import Water, Oil, Acid
 
 
 class SandBox:
-    BLOCK_LIST = [Wall, Sand, Stone, Granite]
+    BLOCK_LIST = [Wall, Sand, Stone, Granite, Ice, Water, Oil, Acid]
 
     KEY_LIST = [pygame.K_0, pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5,
                 pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9, pygame.K_q, pygame.K_w,
@@ -42,6 +43,9 @@ class SandBox:
     def handle_events(self):
         x_pos = pygame.mouse.get_pos()[0] // TILE_SIZE + 1
         y_pos = pygame.mouse.get_pos()[1] // TILE_SIZE + 1
+
+        if FIELD_SIZE < x_pos < 0 or FIELD_SIZE < y_pos < 0:
+            return
 
         if pygame.mouse.get_pressed(3)[0]:
             selected_block = self.sb_field.get(x_pos, y_pos)

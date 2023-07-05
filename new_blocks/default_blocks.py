@@ -6,8 +6,9 @@ from config import TILE_SIZE
 class Block:
     id: str = 'sbn_block'
     density: int = 1000000000000000
+    durability: int = 1000000000000000
+
     movable: bool = False
-    destructible: bool = False
     electrified: bool = False
     simple: bool = True
     color: tuple[int, int, int] = (255, 0, 255)
@@ -21,12 +22,6 @@ class Block:
 
     def update(self, neighbours):
         pass
-
-    def can_move_in_cell(self, cell):
-        return cell.contains.movable and cell.contains.density < self.density
-
-    def can_update_cell(self, cell):
-        return cell.is_free() and self.can_move_in_cell(cell)
 
     def draw(self):
         self.surface.fill(self.color)
