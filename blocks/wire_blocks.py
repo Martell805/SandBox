@@ -38,7 +38,7 @@ class Spark(SolidBlock):
         way = self.chooseWayDown(field)
 
         if way == (0, 0):
-            field.set(self.x, self.y, Void)
+            field.set(self.x)
 
         self.move(field, way)
 
@@ -99,4 +99,4 @@ class Creator(Wire):
     def update(self, field):
         target_class = field[self.x][self.y - 1].__class__
         if target_class != Void and self.check_for_electrified(field) and field[self.x][self.y + 1].destructible:
-            field.set(self.x, self.y + 1, target_class)
+            field.set(self.x)

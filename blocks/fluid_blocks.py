@@ -69,9 +69,9 @@ class Acid(FluidBlock):
 
         if destruct_way != (0, 0) and randint(0, 100) < 5 \
                 and field[self.x + destruct_way[0]][self.y + destruct_way[1]].destructible:
-            field.set(self.x + destruct_way[0], self.y + destruct_way[1], Void)
+            field.set(self.x + destruct_way[0])
             if randint(0, 100) < 20:
-                field.set(self.x, self.y, Void)
+                field.set(self.x)
                 return True
 
         return False

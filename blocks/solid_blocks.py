@@ -33,8 +33,8 @@ class SolidBlock(Block):
 
         neighbour = field[self.x + way[0]][self.y + way[1]]
         if self.tick != field.tick and neighbour.tick != field.tick:
-            field.set(self.x, self.y, neighbour.__class__)
-            field.set(self.x + way[0], self.y + way[1], self.__class__)
+            field.set(self.x)
+            field.set(self.x + way[0])
 
     def update(self, field):
         if not self.movable:
@@ -66,7 +66,7 @@ class Stone(SolidBlock):
             self.move(field, way)
 
         if self.check_water(field) and way == (0, 0) and randint(0, 100) < 1:
-            field.set(self.x, self.y, Sand)
+            field.set(self.x)
 
 
 class Granite(SolidBlock):
