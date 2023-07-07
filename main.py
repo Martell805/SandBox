@@ -1,4 +1,4 @@
-# VERSION 3.3.0
+# VERSION 3.4.0
 
 import os
 
@@ -14,13 +14,15 @@ from blocks.default_blocks import Wall, Void
 from blocks.solid_blocks import Sand, Stone, Granite, Ice, BlackSand
 from blocks.fluid_blocks import Water, Oil, Acid
 from blocks.gas_blocks import CarbonicGas, Gas
+from blocks.wire_blocks import Spark, Wire, InactiveDetector, Creator
 
 
 class SandBox:
     BLOCK_LIST = [
         Wall, Sand, Stone, Granite, BlackSand,
         Ice, Water, Oil, Acid,
-        CarbonicGas, Gas
+        CarbonicGas, Gas,
+        Spark, Wire, InactiveDetector, Creator
     ]
 
     KEY_LIST = [pygame.K_0, pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5,

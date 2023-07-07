@@ -27,7 +27,7 @@ class SolidBlock(Block):
 
         return False
 
-    def check_for_immovable(self, neighbours) -> bool:
+    def check_for_immovable(self, neighbours: list[list[Cell]]) -> bool:
         return not self.movable
 
     def go_down_diagonal(self, neighbours: list[list[Cell]]) -> bool:
@@ -55,7 +55,7 @@ class SolidBlock(Block):
 
         return False
 
-    def init_moves(self):
+    def init_moves(self) -> None:
         self.moves = SMoves(
             Move(self.check_for_immovable),
             Move(self.go_down_straight),

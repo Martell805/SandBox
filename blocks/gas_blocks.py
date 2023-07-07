@@ -10,7 +10,7 @@ class GasBlock(FluidBlock):
     durability = 100
     color = (200, 200, 200)
 
-    def init_moves(self):
+    def init_moves(self) -> None:
         self.moves = SMoves(
             Move(self.check_for_immovable),
             RMoves(

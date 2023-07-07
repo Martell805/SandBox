@@ -1,5 +1,7 @@
 import pygame
+from pygame import Surface
 
+from cell import Cell
 from config import TILE_SIZE
 from moves.sequential_move_set import SMoves
 
@@ -10,7 +12,6 @@ class Block:
     durability: int = 1000000000000000
 
     movable: bool = False
-    electrified: bool = False
     simple: bool = True
     color: tuple[int, int, int] = (255, 0, 255)
     surface: pygame.Surface = pygame.Surface((TILE_SIZE, TILE_SIZE))
@@ -19,22 +20,25 @@ class Block:
     def __init__(self):
         self.init_moves()
 
-    def init_moves(self):
+    def __eq__(self, other):
+        return self.id == other.id
+
+    def init_moves(self) -> None:
         pass
 
     def __repr__(self):
         return f"{self.id}"
 
-    def lock(self):
+    def lock(self) -> None:
         self.movable = False
 
-    def unlock(self):
+    def unlock(self) -> None:
         self.movable = True
 
-    def update(self, neighbours):
+    def update(self, neighbours: list[list[Cell]]) -> None:
         self.moves.perform(neighbours)
 
-    def draw(self):
+    def draw(self) -> Surface:
         self.surface.fill(self.color)
         return self.surface
 

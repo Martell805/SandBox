@@ -15,7 +15,7 @@ class FluidBlock(SolidBlock):
 
     side_preference = None
 
-    def go_side(self, neighbours) -> bool:
+    def go_side(self, neighbours: list[list[Cell]]) -> bool:
         if self.side_preference is None:
             self.side_preference = [0, 2]
             shuffle(self.side_preference)
@@ -34,7 +34,7 @@ class FluidBlock(SolidBlock):
 
         return False
 
-    def init_moves(self):
+    def init_moves(self) -> None:
         self.moves = SMoves(
             Move(self.check_for_immovable),
             Move(self.go_down_straight),
@@ -64,10 +64,10 @@ class Acid(FluidBlock):
     power = 6000
     color = (143, 254, 9)
 
-    def can_destroy_cell(self, cell) -> bool:
+    def can_destroy_cell(self, cell: Cell) -> bool:
         return cell.is_free() and self.power > cell.contains.durability
 
-    def get_random_target(self, neighbours) -> Cell | None:
+    def get_random_target(self, neighbours: list[list[Cell]]) -> Cell | None:
         targets = [neighbours[0][1], neighbours[2][1], neighbours[1][0], neighbours[1][2]]
         shuffle(targets)
         for target in targets:
@@ -76,7 +76,7 @@ class Acid(FluidBlock):
 
         return None
 
-    def destroy_random_neighbour(self, neighbours) -> bool:
+    def destroy_random_neighbour(self, neighbours: list[list[Cell]]) -> bool:
         destroyed_cell = self.get_random_target(neighbours)
 
         if destroyed_cell is None:
@@ -87,7 +87,7 @@ class Acid(FluidBlock):
 
         return True
 
-    def init_moves(self):
+    def init_moves(self) -> None:
         self.moves = SMoves(
             Move(self.destroy_random_neighbour),
             Move(self.check_for_immovable),
