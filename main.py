@@ -1,4 +1,4 @@
-# VERSION 3.4.0
+# VERSION 3.5.0
 
 import os
 
@@ -36,35 +36,44 @@ class SandBox:
         pygame.init()
         pygame.display.set_caption('SandBox')
 
-        self.screen = pygame.display.set_mode((self.SCREEN_SIZE, self.SCREEN_SIZE))
+        self.screen = pygame.display.set_mode((self.SCREEN_SIZE + 300, self.SCREEN_SIZE))
         self.sb_field = Field(FIELD_SIZE)
-        self.pause = False
         self.clock = pygame.time.Clock()
+        self.pause = False
+        self.placement_radius = 1
 
     def pickBlock(self, key):
         try:
-            return self.BLOCK_LIST[self.KEY_LIST.index(key)]
+            result = self.BLOCK_LIST[self.KEY_LIST.index(key)]
+            return result
         except (ValueError, IndexError):
             return self.selected_block_type
 
-    def handle_events(self):
+    def place_blocks(self, x_pos, y_pos, block_type):
+        for x in range(FIELD_SIZE):
+            for y in range(FIELD_SIZE):
+                if (x - x_pos) ** 2 + (y - y_pos) ** 2 < self.placement_radius ** 2:
+                    self.sb_field.set(x, y, block_type())
+
+    def handle_mouse(self):
         x_pos = pygame.mouse.get_pos()[0] // TILE_SIZE + 1
         y_pos = pygame.mouse.get_pos()[1] // TILE_SIZE + 1
 
-        if FIELD_SIZE < x_pos < 0 or FIELD_SIZE < y_pos < 0:
+        if 0 > x_pos or x_pos >= FIELD_SIZE or 0 > y_pos or y_pos >= FIELD_SIZE:
             return
 
         if pygame.mouse.get_pressed(3)[0]:
-            selected_block = self.sb_field.get(x_pos, y_pos)
-            if type(selected_block) not in (self.selected_block_type, ):
-                self.sb_field.set(x_pos, y_pos, self.selected_block_type())
+            self.place_blocks(x_pos, y_pos, self.selected_block_type)
         elif pygame.mouse.get_pressed(3)[1]:
             selected_block = self.sb_field.get(x_pos, y_pos)
             if type(selected_block) not in (Void, self.selected_block_type):
                 self.selected_block_type = type(selected_block)
-                print(f"Вы выбрали {selected_block}")
+                self.screen.blit(self.draw_ui(), (self.SCREEN_SIZE, 0))
         elif pygame.mouse.get_pressed(3)[2]:
-            self.sb_field.set(x_pos, y_pos, Void())
+            self.place_blocks(x_pos, y_pos, Void)
+
+    def handle_events(self):
+        self.handle_mouse()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -74,8 +83,37 @@ class SandBox:
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_SPACE:
                     self.pause = not self.pause
+                    continue
 
                 self.selected_block_type = self.pickBlock(event.key)
+                self.screen.blit(self.draw_ui(), (self.SCREEN_SIZE, 0))
+
+            elif event.type == pygame.MOUSEWHEEL:
+                if event.y > 0:
+                    self.placement_radius += 1
+                else:
+                    self.placement_radius -= 1
+                    self.placement_radius = max(self.placement_radius, 1)
+
+                self.screen.blit(self.draw_ui(), (self.SCREEN_SIZE, 0))
+
+    def draw_text(self, surface: pygame.Surface, x: int, y: int, text: str,
+                  size: int = 20,
+                  color: tuple[int, int, int] = (255, 255, 255),
+                  font: str = 'Times New Roman'):
+        font = pygame.font.SysFont(font, size)
+
+        text_surface = font.render(text, False, color)
+        surface.blit(text_surface, (x, y))
+
+    def draw_ui(self):
+        surface = pygame.Surface((300, self.SCREEN_SIZE))
+
+        self.draw_text(surface, 10, 10, f"SandBox", 30)
+        self.draw_text(surface, 10, 50, f"Placement radius: {self.placement_radius}")
+        self.draw_text(surface, 10, 80, f"Selected block: {self.selected_block_type.id}")
+
+        return surface
 
     def run(self):
         while True:
@@ -99,6 +137,7 @@ class SandBox:
         for q, block_type in enumerate(self.BLOCK_LIST):
             print(f"{pygame.key.name(self.KEY_LIST[q])}. {block_type.__name__}")
 
+        self.screen.blit(self.draw_ui(), (self.SCREEN_SIZE, 0))
         self.run()
 
 

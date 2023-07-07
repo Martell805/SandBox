@@ -24,7 +24,7 @@ class GasBlock(FluidBlock):
 
 
 class CarbonicGas(GasBlock):
-    id = 'sb_carbonicGas'
+    id = 'sb_carbonic_gas'
     density = 500
     color = (30, 30, 30)
 
