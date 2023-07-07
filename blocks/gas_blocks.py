@@ -1,6 +1,7 @@
-from random import shuffle
-
 from blocks.fluid_blocks import FluidBlock
+from moves.move import Move
+from moves.random_move_set import RMoves
+from moves.sequential_move_set import SMoves
 
 
 class GasBlock(FluidBlock):
@@ -9,24 +10,17 @@ class GasBlock(FluidBlock):
     durability = 100
     color = (200, 200, 200)
 
-    def go_down_or_side(self, neighbours):
-        moves = [self.go_down, self.go_side]
-        shuffle(moves)
-
-        if moves[0](neighbours):
-            return True
-
-        if moves[1](neighbours):
-            return True
-
-        return False
-
-    def update(self, neighbours) -> None:
-        if not self.movable:
-            return
-
-        if self.go_down_or_side(neighbours):
-            return
+    def init_moves(self):
+        self.moves = SMoves(
+            Move(self.check_for_immovable),
+            RMoves(
+                SMoves(
+                    Move(self.go_down_straight),
+                    Move(self.go_down_diagonal),
+                ),
+                Move(self.go_side)
+            )
+        )
 
 
 class CarbonicGas(GasBlock):

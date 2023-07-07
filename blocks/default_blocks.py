@@ -1,6 +1,7 @@
 import pygame
 
 from config import TILE_SIZE
+from moves.sequential_move_set import SMoves
 
 
 class Block:
@@ -13,15 +14,25 @@ class Block:
     simple: bool = True
     color: tuple[int, int, int] = (255, 0, 255)
     surface: pygame.Surface = pygame.Surface((TILE_SIZE, TILE_SIZE))
+    moves = SMoves()
+
+    def __init__(self):
+        self.init_moves()
+
+    def init_moves(self):
+        pass
 
     def __repr__(self):
         return f"{self.id}"
 
-    def lock(self, unlocked=False):
-        self.movable = unlocked
+    def lock(self):
+        self.movable = False
+
+    def unlock(self):
+        self.movable = True
 
     def update(self, neighbours):
-        pass
+        self.moves.perform(neighbours)
 
     def draw(self):
         self.surface.fill(self.color)

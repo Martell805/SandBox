@@ -3,6 +3,8 @@ from random import shuffle
 from cell import Cell
 from blocks.default_blocks import Void
 from blocks.solid_blocks import SolidBlock
+from moves.move import Move
+from moves.sequential_move_set import SMoves
 
 
 class FluidBlock(SolidBlock):
@@ -32,21 +34,13 @@ class FluidBlock(SolidBlock):
 
         return False
 
-    def go_down_then_side(self, neighbours) -> bool:
-        if self.go_down(neighbours):
-            return True
-
-        if self.go_side(neighbours):
-            return True
-
-        return False
-
-    def update(self, neighbours) -> None:
-        if not self.movable:
-            return
-
-        if self.go_down_then_side(neighbours):
-            return
+    def init_moves(self):
+        self.moves = SMoves(
+            Move(self.check_for_immovable),
+            Move(self.go_down_straight),
+            Move(self.go_down_diagonal),
+            Move(self.go_side)
+        )
 
 
 class Water(FluidBlock):
@@ -93,12 +87,11 @@ class Acid(FluidBlock):
 
         return True
 
-    def update(self, neighbours) -> None:
-        if not self.movable:
-            return
-
-        if self.destroy_random_neighbour(neighbours):
-            return
-
-        if self.go_down_then_side(neighbours):
-            return
+    def init_moves(self):
+        self.moves = SMoves(
+            Move(self.destroy_random_neighbour),
+            Move(self.check_for_immovable),
+            Move(self.go_down_straight),
+            Move(self.go_down_diagonal),
+            Move(self.go_side)
+        )

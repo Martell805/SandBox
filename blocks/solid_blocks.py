@@ -2,6 +2,8 @@ from random import shuffle
 
 from cell import Cell
 from blocks.default_blocks import Block
+from moves.move import Move
+from moves.sequential_move_set import SMoves
 
 
 class SolidBlock(Block):
@@ -24,6 +26,9 @@ class SolidBlock(Block):
             return True
 
         return False
+
+    def check_for_immovable(self, neighbours) -> bool:
+        return not self.movable
 
     def go_down_diagonal(self, neighbours: list[list[Cell]]) -> bool:
         ways = [0, 2]
@@ -50,12 +55,12 @@ class SolidBlock(Block):
 
         return False
 
-    def update(self, neighbours: list[list[Cell]]) -> None:
-        if not self.movable:
-            return
-
-        if self.go_down(neighbours):
-            return
+    def init_moves(self):
+        self.moves = SMoves(
+            Move(self.check_for_immovable),
+            Move(self.go_down_straight),
+            Move(self.go_down_diagonal)
+        )
 
 
 class Sand(SolidBlock):

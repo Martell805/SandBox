@@ -1,6 +1,5 @@
-from old_blocks.default_blocks import Block
-from old_blocks.fluid_blocks import Void
-from old_blocks.solid_blocks import SolidBlock
+from blocks.default_blocks import Block, Void
+from blocks.solid_blocks import SolidBlock
 
 
 class Wire(Block):
