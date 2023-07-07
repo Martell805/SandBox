@@ -18,7 +18,7 @@ class SolidBlock(Block):
         return cell.is_free() and self.can_move_in_cell(cell)
 
     def go_down_straight(self, neighbours: list[list[Cell]]) -> bool:
-        if self.can_move_in_cell(neighbours[2][1]):
+        if self.can_update_cell(neighbours[2][1]):
             neighbours[2][1].calculated = self
             neighbours[1][1].calculated = neighbours[2][1].contains
             return True
