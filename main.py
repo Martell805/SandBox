@@ -1,4 +1,4 @@
-# VERSION 3.5.0
+# VERSION 3.5.1
 
 import os
 
@@ -103,7 +103,7 @@ class SandBox:
                   font: str = 'Times New Roman'):
         font = pygame.font.SysFont(font, size)
 
-        text_surface = font.render(text, False, color)
+        text_surface = font.render(text, True, color)
         surface.blit(text_surface, (x, y))
 
     def draw_ui(self):
