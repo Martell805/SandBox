@@ -10,11 +10,8 @@ class Block:
     id: str = 'sb_block'
     density: int = 1000000000000000
     durability: int = 1000000000000000
-
     movable: bool = False
-    simple: bool = True
     color: tuple[int, int, int] = (255, 0, 255)
-    surface: pygame.Surface = pygame.Surface((TILE_SIZE, TILE_SIZE))
     moves = SMoves()
 
     def __init__(self):
@@ -37,10 +34,6 @@ class Block:
 
     def update(self, neighbours: list[list[Cell]]) -> None:
         self.moves.perform(neighbours)
-
-    def draw(self) -> Surface:
-        self.surface.fill(self.color)
-        return self.surface
 
 
 class Wall(Block):

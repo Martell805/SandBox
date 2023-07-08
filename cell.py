@@ -42,13 +42,12 @@ class Cell:
         self.contains = self.calculated
         self.calculated = None
 
-    def draw(self, surface) -> None:
-        if self.contains.simple:
-            pygame.draw.rect(surface, self.contains.color,
-                             (self.x * TILE_SIZE, self.y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
-            return
+    def draw_on_surface(self, surface, x, y, surface_tile_size) -> None:
+        pygame.draw.rect(surface, self.contains.color,
+                         (x * surface_tile_size, y * surface_tile_size, surface_tile_size, surface_tile_size))
 
-        surface.blit(self.contains.draw(), (self.x * TILE_SIZE, self.y * TILE_SIZE))
+    def draw(self, surface) -> None:
+        pygame.draw.rect(surface, self.contains.color, (self.x * TILE_SIZE, self.y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
 
     def __repr__(self):
         return f"Cell(({self.x}, {self.y}), {self.contains} -> {self.calculated})"
