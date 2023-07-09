@@ -1,4 +1,4 @@
-# VERSION 3.6.0
+# VERSION 3.7.0
 
 import os
 
@@ -15,25 +15,47 @@ from blocks.solid_blocks import Sand, Stone, Granite, Ice, BlackSand
 from blocks.fluid_blocks import Water, Oil, Acid
 from blocks.gas_blocks import CarbonicGas, Gas
 from blocks.wire_blocks import Spark, Wire, InactiveDetector, Creator
+from blocks.disasterous_blocks import GrayGoo
 
 
 class SandBox:
     BLOCK_LIST = [
-        Wall, Sand, Stone, Granite, BlackSand,
-        Ice, Water, Oil, Acid,
+        Wall,
+        Sand, Stone, Granite, BlackSand, Ice,
+        Water, Oil, Acid,
         CarbonicGas, Gas,
-        Spark, Wire, InactiveDetector, Creator
+        Spark, Wire, InactiveDetector, Creator,
+        GrayGoo,
     ]
 
-    KEY_LIST = [pygame.K_0, pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5,
-                pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9, pygame.K_q, pygame.K_w,
+    KEY_LIST = [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5, pygame.K_6,
+                pygame.K_7, pygame.K_8, pygame.K_9, pygame.K_0, pygame.K_q, pygame.K_w,
                 pygame.K_e, pygame.K_r, pygame.K_t, pygame.K_y, pygame.K_u, pygame.K_i]
+
+    BLOCK_MENU_CATEGORIES = [
+        "default",
+        "solid",
+        "fluid",
+        "gas",
+        "wire",
+        "disastrous",
+    ]
+
+    BLOCK_MENU_DICT = {
+        "default": [Wall, ],
+        "solid": [Sand, Stone, Granite, BlackSand, Ice],
+        "fluid": [Water, Oil, Acid, ],
+        "gas": [CarbonicGas, Gas, ],
+        "wire": [Spark, Wire, InactiveDetector, Creator, ],
+        "disastrous": [GrayGoo, ],
+    }
 
     UI_WIDTH = 400
 
     MINI_WINDOW_TILES = 15
     MINI_WINDOW_TILE_SIZE = 20
     MINI_WINDOW_SIZE = MINI_WINDOW_TILES * MINI_WINDOW_TILE_SIZE
+    MINI_WINDOW_HEIGHT = 650
 
     def __init__(self):
         self.selected_block_type = Sand
@@ -45,14 +67,30 @@ class SandBox:
         self.screen = pygame.display.set_mode((self.SCREEN_SIZE + self.UI_WIDTH, self.SCREEN_SIZE))
         self.sb_field = Field(FIELD_SIZE)
         self.clock = pygame.time.Clock()
+
         self.pause = False
         self.placement_radius = 1
         self.window_x = -1
         self.window_y = -1
+        self.select_menu = ""
 
     def pickBlock(self, key):
+        if key == pygame.K_ESCAPE:
+            self.select_menu = ""
+            self.draw_ui()
+            return self.selected_block_type
+
+        if self.select_menu == "":
+            try:
+                self.select_menu = self.BLOCK_MENU_CATEGORIES[self.KEY_LIST.index(key)]
+                self.draw_ui()
+            except (ValueError, IndexError):
+                pass
+            finally:
+                return self.selected_block_type
+
         try:
-            result = self.BLOCK_LIST[self.KEY_LIST.index(key)]
+            result = self.BLOCK_MENU_DICT[self.select_menu][self.KEY_LIST.index(key)]
             return result
         except (ValueError, IndexError):
             return self.selected_block_type
@@ -72,13 +110,15 @@ class SandBox:
                 self.SCREEN_SIZE + (self.UI_WIDTH - self.MINI_WINDOW_SIZE) // 2 + self.MINI_WINDOW_SIZE
         )
 
-        correct_y = 400 <= mouse_y <= 400 + self.MINI_WINDOW_SIZE
+        correct_y = self.MINI_WINDOW_HEIGHT <= mouse_y <= self.MINI_WINDOW_HEIGHT + self.MINI_WINDOW_SIZE
 
         if not correct_x or not correct_y:
             return False
 
-        rel_pos_x = self.window_x + (mouse_x - (self.SCREEN_SIZE + (self.UI_WIDTH - self.MINI_WINDOW_SIZE) // 2)) // self.MINI_WINDOW_TILE_SIZE
-        rel_pos_y = self.window_y + (mouse_y - 400) // self.MINI_WINDOW_TILE_SIZE
+        rel_pos_x = self.window_x + (mouse_x -
+                                     (self.SCREEN_SIZE + (self.UI_WIDTH - self.MINI_WINDOW_SIZE) // 2)
+                                     ) // self.MINI_WINDOW_TILE_SIZE
+        rel_pos_y = self.window_y + (mouse_y - self.MINI_WINDOW_HEIGHT) // self.MINI_WINDOW_TILE_SIZE
 
         if pygame.mouse.get_pressed(3)[0]:
             if pygame.key.get_mods() == 64:
@@ -90,7 +130,7 @@ class SandBox:
             selected_block = self.sb_field.get(rel_pos_x, rel_pos_y)
             if type(selected_block) not in (Void, self.selected_block_type):
                 self.selected_block_type = type(selected_block)
-                self.screen.blit(self.draw_ui(), (self.SCREEN_SIZE, 0))
+                self.draw_ui()
         elif pygame.mouse.get_pressed(3)[2]:
             self.place_blocks(rel_pos_x, rel_pos_y, Void)
 
@@ -116,7 +156,7 @@ class SandBox:
             selected_block = self.sb_field.get(x_pos, y_pos)
             if type(selected_block) not in (Void, self.selected_block_type):
                 self.selected_block_type = type(selected_block)
-                self.screen.blit(self.draw_ui(), (self.SCREEN_SIZE, 0))
+                self.draw_ui()
         elif pygame.mouse.get_pressed(3)[2]:
             self.place_blocks(x_pos, y_pos, Void)
 
@@ -134,7 +174,7 @@ class SandBox:
                     continue
 
                 self.selected_block_type = self.pickBlock(event.key)
-                self.screen.blit(self.draw_ui(), (self.SCREEN_SIZE, 0))
+                self.draw_ui()
 
             elif event.type == pygame.MOUSEWHEEL:
                 if event.y > 0:
@@ -143,7 +183,7 @@ class SandBox:
                     self.placement_radius -= 1
                     self.placement_radius = max(self.placement_radius, 1)
 
-                self.screen.blit(self.draw_ui(), (self.SCREEN_SIZE, 0))
+                self.draw_ui()
 
     def draw_text(self, surface: pygame.Surface, x: int, y: int, text: str,
                   size: int = 20,
@@ -168,7 +208,7 @@ class SandBox:
 
         if self.window_x == -1:
             surface.fill((100, 100, 0))
-            self.screen.blit(surface, (self.SCREEN_SIZE + (self.UI_WIDTH - self.MINI_WINDOW_SIZE) // 2, 400))
+            self.screen.blit(surface, (self.SCREEN_SIZE + (self.UI_WIDTH - self.MINI_WINDOW_SIZE) // 2, self.MINI_WINDOW_HEIGHT))
             return
 
         if self.window_x + self.MINI_WINDOW_TILES >= FIELD_SIZE:
@@ -183,16 +223,32 @@ class SandBox:
                 real_y = self.window_y + y
                 self.sb_field[real_x][real_y].draw_on_surface(surface, x, y, self.MINI_WINDOW_TILE_SIZE)
 
-        self.screen.blit(surface, (self.SCREEN_SIZE + (self.UI_WIDTH - self.MINI_WINDOW_SIZE) // 2, 400))
+        self.screen.blit(surface, (self.SCREEN_SIZE + (self.UI_WIDTH - self.MINI_WINDOW_SIZE) // 2, self.MINI_WINDOW_HEIGHT))
+
+    def draw_menu(self, surface):
+        self.draw_text(surface, 20, 110, f"Menu:")
+        current_y = 140
+
+        if self.select_menu == "":
+            for q, block_type in enumerate(self.BLOCK_MENU_CATEGORIES):
+                self.draw_text(surface, 20, current_y, f"{pygame.key.name(self.KEY_LIST[q])}. {block_type}")
+                current_y += 30
+            return
+
+        for q, block_type in enumerate(self.BLOCK_MENU_DICT[self.select_menu]):
+            self.draw_text(surface, 20, current_y, f"{pygame.key.name(self.KEY_LIST[q])}. {block_type.__name__}")
+            current_y += 30
 
     def draw_ui(self):
         surface = pygame.Surface((self.UI_WIDTH, self.SCREEN_SIZE))
 
-        self.draw_text(surface, 10, 10, f"SandBox", 30)
-        self.draw_text(surface, 10, 50, f"Placement radius: {self.placement_radius}")
-        self.draw_text(surface, 10, 80, f"Selected block: {self.selected_block_type.id}")
+        self.draw_text(surface, 20, 10, f"SandBox", 30)
+        self.draw_text(surface, 20, 50, f"Placement radius: {self.placement_radius}")
+        self.draw_text(surface, 20, 80, f"Selected block: {self.selected_block_type.id}")
+        
+        self.draw_menu(surface)
 
-        return surface
+        self.screen.blit(surface, (self.SCREEN_SIZE, 0))
 
     def run(self):
         while True:
@@ -209,15 +265,17 @@ class SandBox:
             pygame.display.flip()
 
     def start(self):
-        control_tip = "Управление: \n" \
-                      "Чтобы поставить мир на паузу нажмите SPACE На ПКМ всегда ставится Void. \n" \
-                      "Чтобы изменить блок на ЛКМ выберите его, нажав на клавишу, указанную в списке."
+        control_tip = "Controls:\n" \
+                      "LMB - place selected block\n" \
+                      "Ctrl + LMB - choose area for mini window\n" \
+                      "RMB - place void\n" \
+                      "MMB - copy block\n" \
+                      "Wheel up//down - increase//decrease placement radius\n" \
+                      "Space - pause\n" \
+                      "Esc - go to main menu\n"
         print(control_tip)
-        print("Список блоков:")
-        for q, block_type in enumerate(self.BLOCK_LIST):
-            print(f"{pygame.key.name(self.KEY_LIST[q])}. {block_type.__name__}")
 
-        self.screen.blit(self.draw_ui(), (self.SCREEN_SIZE, 0))
+        self.draw_ui()
         self.run()
 
 
